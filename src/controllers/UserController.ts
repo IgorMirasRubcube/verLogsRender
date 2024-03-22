@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserIn, UserOut } from "dtos/UsersDTO";
+import { stringToDate } from "utils/dateUtil";
 import UserModel from "models/UserModel";
 
 const userModel = new UserModel();
@@ -7,7 +8,9 @@ const userModel = new UserModel();
 export default class UserController {
   create = async (req: Request, res: Response) => {
     try {
-      const user: UserIn = req.body;
+      const birth_date = stringToDate(req.body.birth_date);
+      req.body.birth_date = birth_date;
+      let user: UserIn = req.body;
       const newUser: UserOut = await userModel.create(user);
       res.status(201).json(newUser);
     } catch (e) {

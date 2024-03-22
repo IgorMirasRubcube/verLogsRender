@@ -3,6 +3,7 @@ export interface UserIn {
   email: string;
   phone: string;
   cpf: string;
+  birth_date: Date;
   password: string;
   transaction_password: string;
 }

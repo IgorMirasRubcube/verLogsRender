@@ -27,12 +27,13 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3344:3344
+      - 5555:5555
     networks:
       - rubcamp
     links:
       - db
     env_file:
-      - .env.example
+      - .env
     platform: "linux/amd64"
     depends_on:
       - db

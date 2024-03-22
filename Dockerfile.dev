@@ -9,9 +9,16 @@ COPY . .
 # Install app dependencies
 RUN yarn install
 
+# Install OpenSSL
+RUN apt-get update && apt install -y openssl
+
 # prisma global
 RUN npm i -g prisma
 
+# run migration
+RUN npx prisma generate
+
 EXPOSE 3344
+EXPOSE 5555
 
 CMD [ "yarn", "dev" ]
