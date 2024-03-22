@@ -59,6 +59,8 @@ export default class UserController {
 
   update = async (req: Request, res: Response) => {
     try {
+      const birth_date = stringToDate(req.body.birth_date);
+      req.body.birth_date = birth_date;
       const id: number = parseInt(req.params.id);
       const updateUser: UserIn = req.body;
       const userUpdated: UserOut | null = await userModel.update(
@@ -86,8 +88,8 @@ export default class UserController {
   delete = async (req: Request, res: Response) => {
     try {
       const id: number = parseInt(req.params.id);
-      const userDeleted = await userModel.delete(id);
-      res.status(204).json(userDeleted);
+      const userDeleted: UserOut = await userModel.delete(id);
+      res.status(200).json(userDeleted);
     } catch (e) {
       console.log("Failed to delete user", e);
       res.status(500).send({
