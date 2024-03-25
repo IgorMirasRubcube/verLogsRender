@@ -6,7 +6,7 @@ import UserModel from "models/UserModel";
 const userModel = new UserModel();
 
 export default class UserController {
-  create = async (req: Request, res: Response) => {
+  createWithoutPassword = async (req: Request, res: Response) => {
     try {
       const birth_date = stringToDate(req.body.birth_date);
       req.body.birth_date = birth_date;
@@ -24,7 +24,7 @@ export default class UserController {
 
   get = async (req: Request, res: Response) => {
     try {
-      const id: number = parseInt(req.params.id);
+      const id: string = req.params.id;
       const newUser: UserOut | null = await userModel.get(id);
 
       if (newUser) {
@@ -57,15 +57,13 @@ export default class UserController {
     }
   };
 
-  update = async (req: Request, res: Response) => {
+  updatePassword = async (req: Request, res: Response) => {
     try {
-      const birth_date = stringToDate(req.body.birth_date);
-      req.body.birth_date = birth_date;
-      const id: number = parseInt(req.params.id);
-      const updateUser: UserIn = req.body;
+      const id: string = req.params.id;
+      const password: string = req.body.password;
       const userUpdated: UserOut | null = await userModel.update(
         id,
-        updateUser
+        password
       );
 
       if (userUpdated) {
@@ -87,7 +85,7 @@ export default class UserController {
 
   delete = async (req: Request, res: Response) => {
     try {
-      const id: number = parseInt(req.params.id);
+      const id: string = req.params.id;
       const userDeleted: UserOut = await userModel.delete(id);
       res.status(200).json(userDeleted);
     } catch (e) {

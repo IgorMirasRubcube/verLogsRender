@@ -6,6 +6,8 @@ export interface AddressIn {
   neighborhood: string;
   city: string;
   state: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Change AddressOut later if necessary

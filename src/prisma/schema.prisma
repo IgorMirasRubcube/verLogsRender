@@ -14,25 +14,40 @@ datasource db {
 }
 
 model User {
-  id                      Int      @id @default(autoincrement())
+  id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   full_name               String
   email                   String   @unique
   phone                   String
-  cpf                     String   @unique
-  birth_date              DateTime
-  password                String
-  transaction_password    String
-  balance                 Decimal  @db.Decimal(13,2) @default(0.00)
-  agency                  String?
-  account_number          String?
+  cpf                     String   @unique @db.VarChar(11)
+  birth_date              DateTime @db.Date
+  password                String?
+  n_attempt               Int      @default(0)
+  is_admin                Boolean  @default(false)
   blocked                 Boolean  @default(false)
   block_date              DateTime?
   created_at              DateTime @default(now())
   updated_at              DateTime?
-  address                 Address?  @relation(fields: [addressId], references: [id])
-  addressId               Int?      @unique
-  transferedFrom          Transaction[]  @relation("TransferFrom")
-  transferedTo            Transaction[]  @relation("TransferTo")
+  address                 Address?  @relation(fields: [address_id], references: [id])
+  address_id              Int?      @unique
+  accounts                Account[]
+}
+
+model Account {
+  id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user                    User       @relation(fields: [user_id], references: [id])
+  user_id                 String     @db.Uuid
+  transaction_password    String      @db.VarChar(4)
+  balance                 Decimal     @db.Decimal(13,2) @default(0.00)
+  bank                    String      @default("RubBank S.A.")
+  agency                  String      @default("0001")
+  account_number          String      @db.VarChar(8)
+  n_attempt               Int         @default(0)
+  blocked                 Boolean     @default(false)
+  block_date              DateTime?
+  created_at              DateTime @default(now())
+  updated_at              DateTime?     
+  transfered_from         Transfer[]  @relation("TransferFrom")
+  transfered_to           Transfer[]  @relation("TransferTo")
 }
 
 model Address {
@@ -49,13 +64,35 @@ model Address {
   updated_at    DateTime?
 }
 
-model Transaction {
-  id            Int     @id @default(autoincrement())
-  from_user     User    @relation("TransferFrom" ,fields: [from_user_id], references: [id])
-  from_user_id  Int
-  to_user       User    @relation("TransferTo" ,fields: [to_user_id], references: [id])
-  to_user_id    Int
-  value         Decimal  @db.Decimal(13,2)
-  description   String?
-  created_at    DateTime @default(now())
+model Transfer {
+  id                      String      @id @db.Uuid
+  from_account            Account    @relation("TransferFrom" , fields: [from_account_id], references: [id])
+  from_account_id         String      @db.Uuid   
+  to_account              Account    @relation("TransferTo" , fields: [to_account_id], references: [id])
+  to_account_id           String      @db.Uuid   
+  value                   Decimal  @db.Decimal(13,2)
+  description             String?
+  type                    String?    @default("TED")
+  is_scheduled            Boolean    @default(false)
+  schedule_date           DateTime?
+  status                  TransferStatus?
+  created_at              DateTime @default(now())
+  updated_at              DateTime?
+  notifications           Notification[]
+}
+
+model Notification {
+  id                      Int         @id @default(autoincrement())
+  transfer                Transfer?   @relation(fields: [transfer_id], references: [id])
+  transfer_id             String      @db.Uuid        
+  is_favorite             Boolean     @default(false)
+  viewed_flag             Boolean     @default(false)
+  created_at              DateTime    @default(now())
+  updated_at              DateTime?
+}
+
+enum TransferStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
 }

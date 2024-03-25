@@ -4,12 +4,18 @@ export interface UserIn {
   phone: string;
   cpf: string;
   birth_date: Date;
-  password: string;
-  transaction_password: string;
+  password?: string;
+  n_attempt?: number;
+  is_admin?: boolean;
+  blocked?: boolean;
+  block_date?: Date;
+  created_at?: Date;
+  updated_at?: Date;
+  address_id?: number;
 }
 
 export interface UserOut {
-  id: number;
+  id: string;
   email: string;
   full_name: string | null;
 }

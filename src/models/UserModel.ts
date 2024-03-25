@@ -7,15 +7,20 @@ export default class UserModel {
 
   create = async (user: UserIn) => {
     return await prisma.user.create({
-      data: user
-    });
+      data: user,
+      select: {
+        id: true,
+        email: true,
+        full_name: true,
+      },
+    })
   }
 
   getAll = async () => {
     return await prisma.user.findMany();
   }
 
-  get = async (id: number) => {
+  get = async (id: string) => {
     return await prisma.user.findUnique({
       where: {
         id
@@ -23,7 +28,7 @@ export default class UserModel {
     });
   }
 
-  delete = async (id: number) => {
+  delete = async (id: string) => {
     return await prisma.user.delete({
       where: {
         id
@@ -31,13 +36,13 @@ export default class UserModel {
     })
   }
 
-  update = async (id: number, user: UserIn) => {
+  update = async (id: string, password: string) => {
     return await prisma.user.update({
       where: {
         id
       },
       data: {
-        ...user
+        password: password,
       }
     })
   }
