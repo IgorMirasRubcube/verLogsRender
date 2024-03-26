@@ -17,7 +17,7 @@ model User {
   id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   full_name               String
   email                   String   @unique
-  phone                   String
+  phone                   String   @db.VarChar(11)
   cpf                     String   @unique @db.VarChar(11)
   birth_date              DateTime @db.Date
   password                String?
