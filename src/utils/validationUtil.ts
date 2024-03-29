@@ -1,5 +1,6 @@
 import { MAX_AGE, MIN_AGE } from 'constants/index';
 import * as cpfUtils from 'cpf';
+import cep from 'cep-promise';
 
 export function isValidBirthDate(birth_date_string: string): boolean {
     const birth_date = new Date(birth_date_string);
@@ -15,3 +16,19 @@ export function isValidCPF(cpf: string): Error | boolean  {
     }
     return true;
 }
+
+// passwordRegex verify if has at least 8 characters, among letters, numbers and !@#$%^&* special characters
+export const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?!.*[\[\]\\"'¨()\-+=§´`{ª^~}º/?°;:.,|])(?!.* ).{8,16}$/
+
+// noRepeatRegex DONT match if a string has 3 characters OR letters repeated in sequence.
+export const noRepeatRegex = /^(?!.*(\w)\1{2,}).+$/
+
+export function containsSequence(str: string): boolean {
+    const sequences: string[] = ["abc", "bcd", "cde", "def", "efg", "fgh", "ghi", "hij", "ijk", "jkl", "klm", "lmn", "mno", "nop", "opq",
+        "pqr", "qrs", "rst", "stu", "tuv", "uvw", "vwx", "wxy", "xyz", "ABC", "BCD", "CDE", "DEF", "EFG", "FGH", "GHI", "HIJ", "IJK", "JKL",
+        "KLM", "LMN", "MNO", "NOP", "OPQ", "PQR", "QRS", "RST", "STU", "TUV", "UVW", "VWX", "WXY", "XYZ", "012", "123", "234", "345", "456", "567", "678", "789", "890"];
+
+    return sequences.some(sequence => str.includes(sequence));
+}
+
+// export function isValidCEP(cep: string): Promise

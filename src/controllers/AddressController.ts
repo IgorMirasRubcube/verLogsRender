@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { AddressIn, AddressOut } from "dtos/AddressDTO";
-import { stringToDate } from "utils/dateUtil";
+import { AddressIn, AddressOut } from "dtos/AddressesDTO";
 import AddressModel from "models/AddressModel";
 
 const addressModel = new AddressModel();
@@ -93,5 +92,9 @@ export default class AddressController {
         message: "Failed to delete address",
       });
     }
+  };
+
+  verify = async (req: Request, res: Response) => {
+    res.status(200).send('Sucess');
   };
 }

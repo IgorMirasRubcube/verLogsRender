@@ -6,7 +6,7 @@ CREATE TABLE "User" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "full_name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
+    "phone" VARCHAR(11) NOT NULL,
     "cpf" VARCHAR(11) NOT NULL,
     "birth_date" DATE NOT NULL,
     "password" TEXT,

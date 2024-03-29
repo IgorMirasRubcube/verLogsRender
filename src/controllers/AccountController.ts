@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AccountIn, AccountOut } from "dtos/AccountsDTO";
 import AccountModel from "models/AccountModel";
-import { getRandom } from "utils/randomNumber"
+import { getRandom } from "utils/numberUtil";
 
 const accountModel = new AccountModel();
 

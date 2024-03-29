@@ -7,6 +7,11 @@ export interface AccountIn {
   }
   
 export interface AccountOut {
-    id: string;
-    account_number?: string;
-  }
+  id: string;
+  account_number?: string;
+}
+
+export interface AccountUpdate {  // Alterar senha transacional
+  id: string;
+  transaction_password: string;
+}

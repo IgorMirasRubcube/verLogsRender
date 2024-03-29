@@ -19,3 +19,8 @@ export interface UserOut {
   email: string;
   full_name: string | null;
 }
+
+export interface UserUpdate {   // Alterar senha do App
+  id: string;
+  password: string;
+}

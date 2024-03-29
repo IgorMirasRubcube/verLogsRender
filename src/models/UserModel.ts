@@ -46,4 +46,16 @@ export default class UserModel {
       }
     })
   }
+
+  verifyEmail = async (email: string) => {
+    return await prisma.user.findUnique({
+      where: { email: email }
+    })
+  }
+
+  verifyCPF = async (cpf: string) => {
+    return await prisma.user.findUnique({
+      where: { cpf: cpf }
+    })
+  }
 };

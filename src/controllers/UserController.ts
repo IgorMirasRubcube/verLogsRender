@@ -2,23 +2,26 @@ import { Request, Response } from "express";
 import { UserIn, UserOut } from "dtos/UsersDTO";
 import { stringToDate } from "utils/dateUtil";
 import UserModel from "models/UserModel";
+import AddressModel from "models/AddressModel";
 
 const userModel = new UserModel();
+const addressModel = new AddressModel();
 
 export default class UserController {
-  createWithoutPassword = async (req: Request, res: Response) => {
-    try {
-      const birth_date = stringToDate(req.body.birth_date);
-      req.body.birth_date = birth_date;
-      let user: UserIn = req.body;
-      const newUser: UserOut = await userModel.create(user);
-      res.status(201).json(newUser);
-    } catch (e) {
-      console.log("Failed to create user", e);
-      res.status(500).send({
-        error: "USR-01",
-        message: "Failed to create user",
-      });
+  create = async (req: Request, res: Response) => {
+    if (req.body.hasOwnProperty('full_name')) {
+      try {
+        req.body.birth_date = stringToDate(req.body.birth_date);
+        let user: UserIn = req.body;
+        const newUser: UserOut = await userModel.create(user);
+        res.status(201).json(newUser);
+      } catch (e) {
+        console.log("Failed to create user", e);
+        res.status(500).send({
+          error: "USR-01",
+          message: "Failed to create user",
+        });
+      }
     }
   };
 
@@ -93,6 +96,23 @@ export default class UserController {
       res.status(500).send({
         error: "USR-05",
         message: "Failed to delete user",
+      });
+    }
+  };
+
+  verify = async (req: Request, res: Response) => {
+    try {
+      await Promise.all([ 
+        userModel.verifyEmail(req.body.email),
+        userModel.verifyCPF(req.body.cpf)
+      ]);
+      
+      res.status(200);
+    } catch (e) {
+      console.log("Failed to create user", e);
+      res.status(500).send({
+        error: "USR-01",
+        message: "Failed to create user",
       });
     }
   };
