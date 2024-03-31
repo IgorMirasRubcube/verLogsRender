@@ -5,6 +5,7 @@ import { MapTo } from 'utils/mapToUtil'
 import { AddressIn } from "dtos/AddressesDTO";
 import { AccountIn } from "dtos/AccountsDTO";
 import CreateUser from "application/CreateUser";
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
 const userModel = new UserModel();
 
@@ -16,8 +17,23 @@ export default class UserController {
     const createUser = new CreateUser();
     
     try {
-      let token: string | void = await createUser.execute(user, address, account);
-      res.status(201).json({ token });
+      let user_id: string = await createUser.execute(user, address, account);
+      const payload: JwtPayload = {
+        user: {
+            id: user_id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET as Secret,
+        { expiresIn: "1h" },
+        (err, token) => {
+          if (err) throw err;
+          res.status(201).json({ token })
+        }
+    );
+
     } catch (e) {
       console.log("Failed to create user", e);
       res.status(500).send({

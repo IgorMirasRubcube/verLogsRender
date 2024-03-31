@@ -9,7 +9,7 @@ CREATE TABLE "User" (
     "phone" VARCHAR(11) NOT NULL,
     "cpf" VARCHAR(11) NOT NULL,
     "birth_date" DATE NOT NULL,
-    "password" TEXT,
+    "password" TEXT NOT NULL,
     "n_attempt" INTEGER NOT NULL DEFAULT 0,
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "blocked" BOOLEAN NOT NULL DEFAULT false,
@@ -25,7 +25,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Account" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "user_id" UUID NOT NULL,
-    "transaction_password" VARCHAR(4) NOT NULL,
+    "transfer_password" VARCHAR(4) NOT NULL,
     "balance" DECIMAL(13,2) NOT NULL DEFAULT 0.00,
     "bank" TEXT NOT NULL DEFAULT 'RubBank S.A.',
     "agency" TEXT NOT NULL DEFAULT '0001',

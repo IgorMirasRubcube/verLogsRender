@@ -5,14 +5,13 @@ import UserModel from "models/UserModel";
 import { genSalt, hash } from 'bcryptjs'
 import AddressModel from "models/AddressModel";
 import AccountModel from "models/AccountModel";
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
 export default class CreateUser {
     constructor () {
 
     }
 
-    async execute(user: UserIn, address: AddressIn, account: AccountIn): Promise<string | void> {
+    async execute(user: UserIn, address: AddressIn, account: AccountIn): Promise<string> {
         const userModel = new UserModel();
         const addressModel = new AddressModel();
         const accountModel = new AccountModel();
@@ -27,21 +26,7 @@ export default class CreateUser {
             account.user_id = user_id.id;
             await accountModel.create(account);
 
-            const payload = {
-                user: {
-                    id: user_id.id
-                }
-            };
-
-            jwt.sign(
-                payload,
-                process.env.JWT_SECRET as Secret,
-                { expiresIn: "1h" },
-                (err, token) => {
-                    if (err) throw err;
-                    return token;
-                }
-            );
+            return user_id.id;
         } catch (e) {
             throw e;
         }

@@ -20,7 +20,7 @@ model User {
   phone                   String   @db.VarChar(11)
   cpf                     String   @unique @db.VarChar(11)
   birth_date              DateTime @db.Date
-  password                String  @db.VarChar(16)
+  password                String
   n_attempt               Int      @default(0)
   is_admin                Boolean  @default(false)
   blocked                 Boolean  @default(false)
