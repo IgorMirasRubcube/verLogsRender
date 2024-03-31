@@ -20,4 +20,9 @@ routes.post('/address', validate(ValidationRules.address), validationController.
 // @acess   Public
 routes.post('/password', validate(ValidationRules.password), validationController.ok);
 
+// @route   POST validations/transferpassword
+// @desc    Verify if a password match the rules
+// @acess   Public
+routes.post('/transferpassword', validate(ValidationRules.transferPassword), validationController.ok);
+
 export default routes;

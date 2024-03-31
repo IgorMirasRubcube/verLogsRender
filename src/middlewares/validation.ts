@@ -12,9 +12,9 @@ export const conditionalValidation = (req: Request, res: Response, next: NextFun
        return validate(ValidationRules.address)(req, res, next);
     }
 
-    if (req.body.hasOwnProperty('transaction_password')) {
-      console.log('hasOwnProperty transaction_password');
-      return validate(ValidationRules.account)(req, res, next);
+    if (req.body.hasOwnProperty('transfer_password')) {
+      console.log('hasOwnProperty transfer_password');
+      return validate(ValidationRules.transferPassword)(req, res, next);
    }
    
     // If no condition is met

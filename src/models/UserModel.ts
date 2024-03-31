@@ -9,9 +9,7 @@ export default class UserModel {
     return await prisma.user.create({
       data: user,
       select: {
-        id: true,
-        email: true,
-        full_name: true,
+        id: true
       },
     })
   }

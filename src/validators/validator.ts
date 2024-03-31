@@ -1,18 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import { Result, ValidationChain, check, checkSchema, validationResult } from 'express-validator';
-import { containsSequence, isValidBirthDate, isValidCPF, noRepeatRegex, passwordRegex } from 'utils/validationUtil'
+import { Result, ValidationChain, check, validationResult } from 'express-validator';
+import { containsSequence, isValidBirthDate, isValidCPF, noRepeatRegex, passwordRegex, isOnlyNumbers, noRepeatNumbersRegex, containsDigitsSequence } from 'utils/validationUtil'
 
 export abstract class ValidationRules {
     static userWithoutPassword: ValidationChain[] = [
         check('full_name', 'Name is required').not().isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
-        check('phone', 'Please include a valid phone number').isLength({ min: 11, max: 11 }),
-        check('cpf').custom(cpf => isValidCPF(cpf)),
+        check('phone', 'Please include a valid phone number')
+          .isLength({ min: 11, max: 11 })
+          .custom(phone => isOnlyNumbers(phone))
+          .withMessage('Please include only numbers'),
+        check('cpf')
+          .custom(cpf => isOnlyNumbers(cpf))
+          .withMessage('Please include only numbers')
+          .custom(cpf => isValidCPF(cpf))
+          .withMessage('Invalid CPF'),
         check('birth_date').isISO8601().custom(birth_date_string => isValidBirthDate(birth_date_string)),
     ];
 
     static address: ValidationChain[] = [
-        check('cep', 'Cep is required').isLength({ min: 8 }),
+        check('cep', 'CEP is required')
+          .isLength({ min: 8, max: 8 })
+          .withMessage('Invalid CEP')
+          .custom(cep => isOnlyNumbers(cep))
+          .withMessage('Please include only numbers'),
         check('street', 'Street is required').not().isEmpty(),
         check('number', 'Number is required').not().isEmpty(),
         check('neighborhood', 'Neighborhood is required').not().isEmpty(),
@@ -29,8 +40,17 @@ export abstract class ValidationRules {
         .custom(password => !containsSequence(password))
         .withMessage('Password cannot have sequencial letters or numbers')
     ]
-    static account: ValidationChain[] = [
-      check('transaction_password', 'Transaction password is required').isLength({ min: 4, max: 4 }).isInt(),
+
+    static transferPassword: ValidationChain[] = [
+      check('transfer_password')
+        .isLength({ min: 4, max: 4 })
+        .withMessage('Transfer password must have exactly 4 digits')
+        .custom(transfer_password => isOnlyNumbers(transfer_password))
+        .withMessage('Please include only numbers')
+        .matches(noRepeatNumbersRegex)
+        .withMessage('Transfer Password cannot have 3 repeated digits')
+        .custom(transfer_password => !containsDigitsSequence(transfer_password))
+        .withMessage('Transfer Password cannot have 3 sequencial digits')
     ];
 
 }

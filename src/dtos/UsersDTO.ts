@@ -4,7 +4,7 @@ export interface UserIn {
   phone: string;
   cpf: string;
   birth_date: Date;
-  password?: string;
+  password: string;
   n_attempt?: number;
   is_admin?: boolean;
   blocked?: boolean;
@@ -16,8 +16,6 @@ export interface UserIn {
 
 export interface UserOut {
   id: string;
-  email: string;
-  full_name: string | null;
 }
 
 export interface UserUpdate {   // Alterar senha do App

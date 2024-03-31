@@ -6,17 +6,23 @@ const userModel = new UserModel();
 export default class AddressController {
     verifyUser = async (req: Request, res: Response) => {
         try {
-          await Promise.all([ 
+          const [emailRegistered, cpfRegistered] = await Promise.all([ 
             userModel.verifyEmail(req.body.email),
             userModel.verifyCPF(req.body.cpf)
           ]);
           
-          res.status(200);
-        } catch (e) {
-          console.log("Failed to create user", e);
-          res.status(500).send({
+          if (emailRegistered || cpfRegistered){
+            return res.status(500).send({
             error: "USR-01",
             message: "Failed to create user",
+          });
+          }
+
+          res.status(200).send('Sucess');
+        } catch (e) {
+          console.log("Internal server error", e);
+          res.status(500).send({
+            message: "Internal server error",
           });
         }
       };

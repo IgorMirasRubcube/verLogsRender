@@ -1,5 +1,5 @@
 export interface AccountIn {
-    transaction_password: string;
+    transfer_password: string;
     account_number: string;
     created_at?: Date;
     updated_at?: Date;
@@ -13,5 +13,5 @@ export interface AccountOut {
 
 export interface AccountUpdate {  // Alterar senha transacional
   id: string;
-  transaction_password: string;
+  transfer_password: string;
 }

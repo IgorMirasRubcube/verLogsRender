@@ -20,7 +20,7 @@ model User {
   phone                   String   @db.VarChar(11)
   cpf                     String   @unique @db.VarChar(11)
   birth_date              DateTime @db.Date
-  password                String?
+  password                String  @db.VarChar(16)
   n_attempt               Int      @default(0)
   is_admin                Boolean  @default(false)
   blocked                 Boolean  @default(false)
@@ -36,7 +36,7 @@ model Account {
   id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user                    User       @relation(fields: [user_id], references: [id])
   user_id                 String     @db.Uuid
-  transaction_password    String      @db.VarChar(4)
+  transfer_password       String      @db.VarChar(4)
   balance                 Decimal     @db.Decimal(13,2) @default(0.00)
   bank                    String      @default("RubBank S.A.")
   agency                  String      @default("0001")
