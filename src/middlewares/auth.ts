@@ -14,9 +14,9 @@ export const authentication = (req: Request, res:Response, next: NextFunction) =
 		return res.status(401).json({ msg: 'No token, auth denied' });
 	}
 
-  if (!process.env.JWT_SECRET) {
-    return res.status(500).json({ msg: 'Internal server error' });
-  }
+	if (!process.env.JWT_SECRET) {
+		return res.status(500).json({ msg: 'Internal server error' });
+	}
 
 	// Verify token
 	try {

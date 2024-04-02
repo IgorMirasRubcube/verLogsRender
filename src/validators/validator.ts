@@ -1,6 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { Result, ValidationChain, check, validationResult } from 'express-validator';
-import { containsSequence, isValidBirthDate, isValidCPF, noRepeatRegex, passwordRegex, isOnlyNumbers, noRepeatNumbersRegex, containsDigitsSequence } from 'utils/validationUtil'
+import { containsSequence,
+         isValidBirthDate,
+         isValidCPF,
+         noRepeatRegex,
+         passwordRegex,
+         isOnlyNumbers,
+         noRepeatNumbersRegex,
+         containsDigitsSequence,
+         isValidCEP
+       } from 'utils/validationUtil'
 
 export abstract class ValidationRules {
     static userWithoutPassword: ValidationChain[] = [
@@ -20,10 +29,8 @@ export abstract class ValidationRules {
 
     static address: ValidationChain[] = [
         check('cep', 'CEP is required')
-          .isLength({ min: 8, max: 8 })
-          .withMessage('Invalid CEP')
-          .custom(cep => isOnlyNumbers(cep))
-          .withMessage('Please include only numbers'),
+          .custom(async cep => isValidCEP(cep))
+          .withMessage('Invalid CEP'),
         check('street', 'Street is required').not().isEmpty(),
         check('number', 'Number is required').not().isEmpty(),
         check('neighborhood', 'Neighborhood is required').not().isEmpty(),
@@ -51,6 +58,30 @@ export abstract class ValidationRules {
         .withMessage('Transfer Password cannot have 3 repeated digits')
         .custom(transfer_password => !containsDigitsSequence(transfer_password))
         .withMessage('Transfer Password cannot have 3 sequencial digits')
+    ];
+
+    static cpf: ValidationChain[] = [
+      check('cpf')
+          .custom(cpf => isOnlyNumbers(cpf))
+          .withMessage('Please include only numbers')
+          .custom(cpf => isValidCPF(cpf))
+          .withMessage('Invalid CPF')
+    ];
+
+    static agency: ValidationChain[] = [
+      check('agency')
+          .custom(agency => isOnlyNumbers(agency))
+          .withMessage('Please include only numbers')
+          .isLength({ min: 4, max:4 })
+          .withMessage('Invalid Agency')
+    ];
+
+    static account_number: ValidationChain[] = [
+      check('account_number')
+          .custom(account_number => isOnlyNumbers(account_number))
+          .withMessage('Please include only numbers')
+          .isLength({ min: 8, max: 8 })
+          .withMessage('Invalid account number')
     ];
 
 }

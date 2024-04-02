@@ -25,10 +25,10 @@ CREATE TABLE "User" (
 CREATE TABLE "Account" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "user_id" UUID NOT NULL,
-    "transfer_password" VARCHAR(4) NOT NULL,
+    "transfer_password" TEXT NOT NULL,
     "balance" DECIMAL(13,2) NOT NULL DEFAULT 0.00,
     "bank" TEXT NOT NULL DEFAULT 'RubBank S.A.',
-    "agency" TEXT NOT NULL DEFAULT '0001',
+    "agency" VARCHAR(4) NOT NULL DEFAULT '0001',
     "account_number" VARCHAR(8) NOT NULL,
     "n_attempt" INTEGER NOT NULL DEFAULT 0,
     "blocked" BOOLEAN NOT NULL DEFAULT false,
@@ -57,7 +57,7 @@ CREATE TABLE "Address" (
 
 -- CreateTable
 CREATE TABLE "Transfer" (
-    "id" UUID NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "from_account_id" UUID NOT NULL,
     "to_account_id" UUID NOT NULL,
     "value" DECIMAL(13,2) NOT NULL,
@@ -92,6 +92,9 @@ CREATE UNIQUE INDEX "User_cpf_key" ON "User"("cpf");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_address_id_key" ON "User"("address_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Account_account_number_key" ON "Account"("account_number");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "Address"("id") ON DELETE SET NULL ON UPDATE CASCADE;

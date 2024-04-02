@@ -17,7 +17,7 @@ routes.post('/',
     userController.create
 );
 
-routes.get('/', userController.getAll);
+routes.get('/', authentication ,userController.getAll);
 routes.get('/:id', authentication ,userController.get);
 routes.put('/:id', authentication ,userController.updatePassword);
 routes.delete('/:id', authentication ,userController.delete);

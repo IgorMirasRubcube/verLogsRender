@@ -15,11 +15,24 @@ export default class AccountModel {
     return await prisma.account.findMany();
   }
 
-  get = async (id: string) => {
+  get = async (id: string,
+    selectFields: Record<string, boolean> = {
+       id: true,
+       user_id: true,
+       transfer_password: true,
+       balance: true,
+       bank: true,
+       agency: true,
+       account_number: true,
+       n_attemp: true,
+       blocked: true,
+       block_date: true,
+       created_at: true,
+       updated_at: true 
+    })  => {
     return await prisma.account.findUnique({
-      where: {
-        id
-      }
+      where: { id },
+      select: selectFields,
     });
   }
 
@@ -41,4 +54,50 @@ export default class AccountModel {
       }
     })
   }
+
+  getAllByUserId = async (userId: string,
+    selectFields: Record<string, boolean> = {
+       id: true,
+       user_id: true,
+       transfer_password: true,
+       balance: true,
+       bank: true,
+       agency: true,
+       account_number: true,
+       n_attemp: true,
+       blocked: true,
+       block_date: true,
+       created_at: true,
+       updated_at: true 
+    })  => {
+      return await prisma.account.findMany({
+        where: { user_id: userId },
+        select: selectFields,
+      });
+    }
+
+    getByAgencyAndNumber = async (agency: string,
+      account_number: string,
+      selectFields: Record<string, boolean> = {
+         id: true,
+         user_id: true,
+         transfer_password: true,
+         balance: true,
+         bank: true,
+         agency: true,
+         account_number: true,
+         n_attemp: true,
+         blocked: true,
+         block_date: true,
+         created_at: true,
+         updated_at: true 
+      })  => {
+      return await prisma.account.findFirst({
+        where: {
+          agency: agency,
+          account_number: account_number
+        },
+        select: selectFields,
+      });
+    }
 };

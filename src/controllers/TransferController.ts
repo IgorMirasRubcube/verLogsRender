@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserIn, UserOut } from "dtos/UsersDTO";
+import { TransferIn, TransferOut } from "dtos/TransfersDTO";
 import UserModel from "models/UserModel";
 import { MapTo } from 'utils/mapToUtil'
 import { AddressIn } from "dtos/AddressesDTO";
@@ -46,7 +46,7 @@ export default class UserController {
   get = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const newUser: UserOut | null = await userModel.get(id) as UserOut | null;
+      const newUser: UserOut | null = await userModel.get(id);
 
       if (newUser) {
         res.status(200).json(newUser);

@@ -7,8 +7,8 @@ export default class AddressController {
     verifyUser = async (req: Request, res: Response) => {
         try {
           const [emailRegistered, cpfRegistered] = await Promise.all([ 
-            userModel.verifyEmail(req.body.email),
-            userModel.verifyCPF(req.body.cpf)
+            userModel.findByEmail(req.body.email),
+            userModel.findByCPF(req.body.cpf)
           ]);
           
           if (emailRegistered || cpfRegistered){

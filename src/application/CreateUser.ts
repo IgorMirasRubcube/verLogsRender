@@ -5,6 +5,7 @@ import UserModel from "models/UserModel";
 import { genSalt, hash } from 'bcryptjs'
 import AddressModel from "models/AddressModel";
 import AccountModel from "models/AccountModel";
+import { hasBirthDate } from "utils/validationUtil"
 
 export default class CreateUser {
     constructor () {
@@ -16,9 +17,15 @@ export default class CreateUser {
         const addressModel = new AddressModel();
         const accountModel = new AccountModel();
 
+        if (hasBirthDate(account.transfer_password, user.birth_date)) {
+            throw new Error('Transfer password cannot have birth date infos');
+        }
+
         try {
             const salt = await genSalt(10);
             user.password = await hash(user.password, salt);
+            account.transfer_password = await hash(account.transfer_password, salt);
+            
             const user_id: UserOut = await userModel.create(user);
 
             await addressModel.create(address);

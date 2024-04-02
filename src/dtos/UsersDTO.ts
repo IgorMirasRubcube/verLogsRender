@@ -22,3 +22,13 @@ export interface UserUpdate {   // Alterar senha do App
   id: string;
   password: string;
 }
+
+export interface UserLoginIn {
+  cpf: string;
+  password: string;
+}
+
+export interface UserLoginOut {
+  id: string;
+  password: string;
+}

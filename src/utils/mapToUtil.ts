@@ -15,6 +15,7 @@ export abstract class MapTo {
         } = body;
 
         birth_date = new Date(birth_date);
+        email = email.toLowerCase();
 
         return {
             full_name,

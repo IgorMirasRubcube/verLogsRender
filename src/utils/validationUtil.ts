@@ -1,7 +1,6 @@
 import { MAX_AGE, MIN_AGE } from 'constants/index';
 import * as cpfUtils from 'cpf';
-import cep from 'cep-promise';
-import e from 'express';
+import fetchCep from 'cep-promise';
 
 export function isOnlyNumbers(sentence: string): boolean {
     const regex = /^\d+$/;
@@ -16,11 +15,43 @@ export function isValidBirthDate(birth_date_string: string): boolean {
     return (age >= MIN_AGE && age <= MAX_AGE);
 }
 
-export function isValidCPF(cpf: string): Error | boolean  {
+export function isValidCPF(cpf: string): boolean  {
     if (!(cpfUtils.isValid(cpf))) {
         throw new Error('Please enter a valid CPF');
     }
     return true;
+}
+
+export async function isValidCEP(cep: string): Promise<boolean> {
+    try {
+        await fetchCep(cep);
+        return true;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export function hasBirthDate(transfer_password: string, birth_date: Date): boolean {
+    const year = String(birth_date.getFullYear());
+    let month = String(birth_date.getMonth() + 1);
+    let day = String(birth_date.getDate() + 1);
+
+    if (parseInt(day) < 10) {
+        day = '0' + day;
+    }
+
+    if (parseInt(month) < 10) {
+        month = '0' + month;
+    }
+
+    if (transfer_password === year ||
+        transfer_password === day + month ||
+        transfer_password === month + day
+    ) {
+        return true;
+    }
+
+    return false;
 }
 
 // passwordRegex verify if has at least 8 characters, among letters, numbers and !@#$%^&* special characters
@@ -44,5 +75,3 @@ export function containsDigitsSequence(str: string): boolean {
 
     return sequences.some(sequence => str.includes(sequence));
 }
-
-// export function isValidCEP(cep: string): Promise

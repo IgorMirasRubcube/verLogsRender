@@ -9,6 +9,9 @@ export interface AccountIn {
 export interface AccountOut {
   id: string;
   account_number?: string;
+  user_id?: string;
+  bank?: string;
+  agency?: string;
 }
 
 export interface AccountUpdate {  // Alterar senha transacional

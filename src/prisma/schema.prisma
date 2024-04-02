@@ -36,11 +36,11 @@ model Account {
   id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user                    User       @relation(fields: [user_id], references: [id])
   user_id                 String     @db.Uuid
-  transfer_password       String      @db.VarChar(4)
+  transfer_password       String
   balance                 Decimal     @db.Decimal(13,2) @default(0.00)
   bank                    String      @default("RubBank S.A.")
-  agency                  String      @default("0001")
-  account_number          String      @db.VarChar(8)
+  agency                  String      @default("0001") @db.VarChar(4)
+  account_number          String      @db.VarChar(8) @unique
   n_attempt               Int         @default(0)
   blocked                 Boolean     @default(false)
   block_date              DateTime?
@@ -65,7 +65,7 @@ model Address {
 }
 
 model Transfer {
-  id                      String      @id @db.Uuid
+  id                      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   from_account            Account    @relation("TransferFrom" , fields: [from_account_id], references: [id])
   from_account_id         String      @db.Uuid   
   to_account              Account    @relation("TransferTo" , fields: [to_account_id], references: [id])

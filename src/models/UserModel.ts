@@ -18,11 +18,25 @@ export default class UserModel {
     return await prisma.user.findMany();
   }
 
-  get = async (id: string) => {
+  get = async (id: string, selectFields: Record<string, boolean> = {
+      id: true,
+      full_name: true,
+      email: true,
+      phone: true,
+      cpf: true,
+      birth_date: true,
+      password: true,
+      n_attempt: true,
+      is_admin: true,
+      blocked: true,
+      block_date: true,
+      created_at: true,
+      updated_at: true,
+      address_id: true
+    }) => {
     return await prisma.user.findUnique({
-      where: {
-        id
-      }
+      where: { id },
+      select: selectFields,
     });
   }
 
@@ -45,15 +59,16 @@ export default class UserModel {
     })
   }
 
-  verifyEmail = async (email: string) => {
+  findByEmail = async (email: string) => {
     return await prisma.user.findUnique({
       where: { email: email }
     })
   }
 
-  verifyCPF = async (cpf: string) => {
+  findByCPF = async (cpf: string, selectFields: Record<string, boolean> = { id: true, cpf: true, password: true }) => {
     return await prisma.user.findUnique({
-      where: { cpf: cpf }
-    })
+      where: { cpf: cpf },
+      select: selectFields,
+    });
   }
 };
