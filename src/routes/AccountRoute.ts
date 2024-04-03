@@ -14,7 +14,7 @@ routes.get('/', accountController.getAll);
 routes.get('/:agency/:account_number',
     validate(ValidationRules.agency),
     validate(ValidationRules.account_number),
-    accountController.get
+    accountController.getByAgencyAndNumber
 );
 
 routes.put('/:id', accountController.update);
@@ -25,7 +25,16 @@ routes.delete('/:id', accountController.delete);
 // @acess   Private
 routes.post('/cpf',
     validate(ValidationRules.cpf),
-    accountController.getAllByUser
+    accountController.getAllByCPF
+);
+
+// @route   POST accounts/balance
+// @desc    Verify if account balance is equal or greater transfer_value
+// @acess   Private
+routes.post('/balance',
+    validate(ValidationRules.transfer_value),
+    validate(ValidationRules.account_id),
+    accountController.verifyEnoughBalance
 );
 
 export default routes;

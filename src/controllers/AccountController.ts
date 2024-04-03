@@ -4,6 +4,7 @@ import AccountModel from "models/AccountModel";
 import { getRandom } from "utils/numberUtil";
 import UserModel from "models/UserModel";
 import { UserOut } from "dtos/UsersDTO";
+import { Prisma } from "@prisma/client";
 
 const accountModel = new AccountModel();
 const userModel = new UserModel();
@@ -24,46 +25,37 @@ export default class AccountController {
     }
   };
 
-  get = async (req: Request, res: Response) => {
+  verifyEnoughBalance = async (req: Request, res: Response) => {
     try {
-      const agency: string = req.params.agency
-      const account_number: string = req.params.account_number;
-      const newAccount: AccountOut | null = await accountModel.getByAgencyAndNumber(
-        agency,
-        account_number,
-        { user_id: true, bank: true, agency: true, account_number: true }
-      ) as AccountOut | null;
-      
-      if (!newAccount) {
+      const id: string = req.body.id;
+      const transfer_value: number = req.body.transfer_value
+      const newAccount: AccountOut | null = await accountModel.get(id, { balance: true }) as AccountOut | null;
+
+      if (!newAccount?.balance) {
         return res.status(404).json({
           error: "ACC-06",
           message: "Account not found",
         });
       }
 
-      const full_name: string | null = await userModel.get(newAccount.id, { full_name: true }) as string | null
+      const balanceDecimal = new Prisma.Decimal(newAccount.balance).toNumber();
 
-      if (!full_name) {
-        return res.status(404).json({
-          error: "ACC-06",
-          message: "Account not found",
+      if (balanceDecimal < transfer_value) {
+        return res.status(400).json({
+          error: "TFR-07",
+          message: "Not enough balance"
         });
       }
 
-      res.status(200).json({
-        full_name: full_name,
-        bank: newAccount.bank,
-        agency: newAccount.agency,
-        account_number: newAccount.account_number
-      })
+      res.status(200).send('Sucess');
     } catch (e) {
-      console.log("Failed to get account", e);
+      console.log("Server Error", e);
       res.status(500).send({
-        error: "ACC-02",
-        message: "Failed to get account",
+        error: "SRV-01",
+        message: "Server Error",
       });
     }
-  };
+  }
 
   getAll = async (req: Request, res: Response) => {
     try {
@@ -118,22 +110,70 @@ export default class AccountController {
     }
   };
 
-  getAllByUser = async (req: Request, res: Response) => {
+  getByAgencyAndNumber = async (req: Request, res: Response) => {
     try {
-      const { cpf } : { cpf: string } = req.body;
-      console.log('cpf: ', cpf);
-      const userId: UserOut | null = await userModel.findByCPF(cpf, {id: true}) as UserOut | null;
-      console.log('userId: ', userId);
-
-      if (!userId) {
+      const agency: string = req.params.agency
+      const account_number: string = req.params.account_number;
+      const newAccount: AccountOut | null = await accountModel.getByAgencyAndNumber(
+        agency,
+        account_number,
+        { id: true, user_id: true, bank: true, agency: true, account_number: true }
+      ) as AccountOut | null;
+      
+      if (!newAccount?.user_id) {
         return res.status(404).json({
           error: "ACC-06",
           message: "Account not found",
         });
       }
 
-      const accounts: AccountOut[] | null = await accountModel.getAllByUserId(userId.id, {bank: true, agency: true, account_number: true}) as AccountOut[] | null;
-      res.status(200).json(accounts);
+      const newUser: UserOut | null = await userModel.get(newAccount.user_id, { full_name: true }) as UserOut | null
+
+      if (!newUser?.full_name) {
+        return res.status(404).json({
+          error: "ACC-06",
+          message: "Account not found",
+        });
+      }
+
+      res.status(200).json({
+        full_name: newUser.full_name,
+        bank: newAccount.bank,
+        agency: newAccount.agency,
+        account_number: newAccount.account_number,
+        account_id: newAccount.id
+      });
+    } catch (e) {
+      console.log("Failed to get account", e);
+      res.status(500).send({
+        error: "ACC-02",
+        message: "Failed to get account",
+      });
+    }
+  };
+
+  getAllByCPF = async (req: Request, res: Response) => {
+    try {
+      const { cpf } : { cpf: string } = req.body;
+      console.log('cpf: ', cpf);
+      const newUser: UserOut | null = await userModel.findByCPF(cpf, {id: true, full_name: true }) as UserOut | null;
+      console.log('newUser: ', newUser);
+
+      if (!newUser) {
+        return res.status(404).json({
+          error: "ACC-06",
+          message: "Account not found",
+        });
+      }
+
+      const accounts: AccountOut[] | null = await accountModel.getAllByUserId(newUser.id, {
+        id: true, bank: true, agency: true, account_number: true
+      }) as AccountOut[] | null;
+
+      res.status(200).json({
+        full_name: newUser.full_name,
+        accounts: accounts
+      });
     } catch (e) {
       console.log("Server Error", e);
       res.status(500).send({

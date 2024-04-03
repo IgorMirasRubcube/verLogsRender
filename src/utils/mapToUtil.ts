@@ -1,6 +1,7 @@
 import { AccountIn } from "dtos/AccountsDTO";
 import { AddressIn } from "dtos/AddressesDTO";
 import { UserIn } from "dtos/UsersDTO";
+import { TransferIn } from "dtos/TransfersDTO";
 import { getRandom } from "./numberUtil";
 
 export abstract class MapTo {
@@ -62,5 +63,29 @@ export abstract class MapTo {
             account_number,
             user_id
         };
+    }
+
+    static TransferIn = (body: any): TransferIn => {
+        let {
+            from_account_id,
+            to_account_id,
+            value,
+            description,
+            type,
+            is_scheduled,
+            schedule_date,
+            status,
+        } = body
+
+        return {
+            from_account_id,
+            to_account_id,
+            value,
+            description,
+            type,
+            is_scheduled,
+            schedule_date,
+            status,
+        }
     }
 }

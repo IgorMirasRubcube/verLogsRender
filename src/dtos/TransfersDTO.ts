@@ -1,9 +1,9 @@
-import { TransferStatus } from "@prisma/client";
+import { Prisma, TransferStatus } from "@prisma/client";
 
 export interface TransferIn {
     from_account_id: string;
     to_account_id: string;
-    value: string;
+    value: Prisma.Decimal;
     description?: string;
     type?: string;
     is_scheduled?: boolean;

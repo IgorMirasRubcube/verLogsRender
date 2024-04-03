@@ -100,4 +100,16 @@ export default class AccountModel {
         select: selectFields,
       });
     }
+
+    updateBalance = async (id: string, balance: number) => {
+      return await prisma.account.update({
+        where: {
+          id
+        },
+        data: {
+          balance: balance,
+        },
+        select: { balance: true}
+      })
+    }
 };

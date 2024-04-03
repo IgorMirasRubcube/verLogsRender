@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 export interface AccountIn {
     transfer_password: string;
     account_number: string;
@@ -7,11 +9,13 @@ export interface AccountIn {
   }
   
 export interface AccountOut {
-  id: string;
+  id?: string;
   account_number?: string;
   user_id?: string;
   bank?: string;
   agency?: string;
+  balance?: Prisma.Decimal;
+  transfer_password?: string;
 }
 
 export interface AccountUpdate {  // Alterar senha transacional

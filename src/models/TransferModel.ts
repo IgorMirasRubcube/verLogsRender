@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { UserIn } from 'dtos/UsersDTO';
+import { TransferIn } from 'dtos/TransfersDTO';
 
 const prisma = new PrismaClient();
 
-export default class UserModel {
+export default class TransferModel {
 
-  create = async (user: UserIn) => {
-    return await prisma.user.create({
-      data: user,
+  create = async (transfer: TransferIn) => {
+    return await prisma.transfer.create({
+      data: transfer,
       select: {
         id: true
       },
@@ -15,7 +15,7 @@ export default class UserModel {
   }
 
   getAll = async () => {
-    return await prisma.user.findMany();
+    return await prisma.transfer.findMany();
   }
 
   get = async (id: string, selectFields: Record<string, boolean> = {

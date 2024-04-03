@@ -4,41 +4,25 @@ import UserModel from "models/UserModel";
 import { MapTo } from 'utils/mapToUtil'
 import { AddressIn } from "dtos/AddressesDTO";
 import { AccountIn } from "dtos/AccountsDTO";
-import CreateUser from "application/CreateUser";
+import CreateTransfer from "application/CreateTransfer";
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
 const userModel = new UserModel();
 
-export default class UserController {
+export default class TransferController {
   create = async (req: Request, res: Response) => {
-    const user: UserIn = MapTo.UserIn(req.body);
-    const address: AddressIn = MapTo.AddressIn(req.body);
-    let account: AccountIn = MapTo.AccountIn(req.body);
-    const createUser = new CreateUser();
+    const transfer: TransferIn = MapTo.TransferIn(req.body);
+    const transfer_password: string = req.body.transfer_password;
+    const createTransfer = new CreateTransfer();
     
     try {
-      let user_id: string = await createUser.execute(user, address, account);
-      const payload: JwtPayload = {
-        user: {
-            id: user_id
-        }
-      };
-
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET as Secret,
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) throw err;
-          res.status(201).json({ token })
-        }
-    );
-
+      let balances: {} = await createTransfer.execute(transfer, transfer_password);
+      res.status(201).json(balances);
     } catch (e) {
-      console.log("Failed to create user", e);
+      console.log("Failed to create transfer", e);
       res.status(500).send({
-        error: "USR-01",
-        message: "Failed to create user",
+        error: "TFR-01",
+        message: "Failed to create transfer",
       });
     }
   };

@@ -1,11 +1,33 @@
-import { MAX_AGE, MIN_AGE } from 'constants/index';
+import { MAX_AGE, MAX_TRANSFER_VALUE, MIN_AGE, MIN_TRANSFER_VALUE } from 'constants/index';
 import * as cpfUtils from 'cpf';
 import fetchCep from 'cep-promise';
+import { Prisma } from '@prisma/client';
 
 export function isOnlyNumbers(sentence: string): boolean {
     const regex = /^\d+$/;
     return regex.test(sentence);
 }
+
+export function isValidTransferValue(value: Prisma.Decimal): boolean {
+    return (value.toNumber() >= MIN_TRANSFER_VALUE 
+    && value.toNumber() <= MAX_TRANSFER_VALUE);
+}
+
+export function isValidTransferStatus(status: string): boolean {
+    if (status === 'SCHEDULED' || status === 'COMPLETED' || status === 'CANCELED'){
+        return true;
+    }
+    return false;
+}
+
+export function isAfterNow(date: string): boolean {
+    const scheduleDate = new Date(date);
+    const currentDate = new Date();
+    if (scheduleDate <= currentDate) {
+        throw new Error('Schedule date must be in the future');
+    }
+    return true;
+};
 
 export function isValidBirthDate(birth_date_string: string): boolean {
     const birth_date = new Date(birth_date_string);

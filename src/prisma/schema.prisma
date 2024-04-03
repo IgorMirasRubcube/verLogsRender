@@ -71,7 +71,7 @@ model Transfer {
   to_account              Account    @relation("TransferTo" , fields: [to_account_id], references: [id])
   to_account_id           String      @db.Uuid   
   value                   Decimal  @db.Decimal(13,2)
-  description             String?
+  description             String?  @db.VarChar(120)
   type                    String?    @default("TED")
   is_scheduled            Boolean    @default(false)
   schedule_date           DateTime?

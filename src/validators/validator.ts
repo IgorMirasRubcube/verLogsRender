@@ -1,3 +1,4 @@
+import { MAX_DESCRIPTION_LENGTH, MIN_TRANSFER_VALUE, MAX_TRANSFER_VALUE } from "constants/index";
 import { NextFunction, Request, Response } from "express";
 import { Result, ValidationChain, check, validationResult } from 'express-validator';
 import { containsSequence,
@@ -8,7 +9,10 @@ import { containsSequence,
          isOnlyNumbers,
          noRepeatNumbersRegex,
          containsDigitsSequence,
-         isValidCEP
+         isValidCEP,
+         isAfterNow,
+         isValidTransferStatus,
+         isValidTransferValue,
        } from 'utils/validationUtil'
 
 export abstract class ValidationRules {
@@ -82,6 +86,52 @@ export abstract class ValidationRules {
           .withMessage('Please include only numbers')
           .isLength({ min: 8, max: 8 })
           .withMessage('Invalid account number')
+    ];
+
+    static transfer: ValidationChain[] = [
+      check('from_account_id').isUUID(),
+      check('to_account_id').isUUID(),
+      check('value')
+        .isFloat({ min: MIN_TRANSFER_VALUE, max: MAX_TRANSFER_VALUE })
+        .withMessage('Invalid value'),
+      check('description')
+        .optional()
+        .isLength({ max: MAX_DESCRIPTION_LENGTH })
+        .withMessage('description do not must be greater than 120 characters'),
+      check('type')
+        .optional()
+        .isString(),                            
+      check('isScheduled')
+        .optional()
+        .isBoolean(),
+      check('schedule_date')
+        .optional()
+        .isISO8601()
+        .withMessage('Please include a valid date format (YYYY-MM-DD)')
+        .custom((schedule_date) => isAfterNow(schedule_date)),
+      check('status')
+        .custom(status => isValidTransferStatus(status))
+        .withMessage('Invalid transfer status')
+    ];
+
+    static account_id: ValidationChain[] = [
+      check('id').isUUID()
+    ]
+
+    static transfer_value: ValidationChain[] = [
+      check('value')
+        .isDecimal()
+        .withMessage('Invalid value')
+        .custom(value => isValidTransferValue(value))
+        .withMessage('Do not include negative values')
+    ];
+
+    static balance: ValidationChain[] = [
+      check('balance')
+        .isDecimal()
+        .withMessage('Invalid value')
+        .custom(balance => isValidTransferValue(balance))
+        .withMessage('Do not include negative values')
     ];
 
 }

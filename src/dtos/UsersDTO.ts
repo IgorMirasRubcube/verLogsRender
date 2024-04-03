@@ -16,6 +16,7 @@ export interface UserIn {
 
 export interface UserOut {
   id: string;
+  full_name?: string;
 }
 
 export interface UserUpdate {   // Alterar senha do App
