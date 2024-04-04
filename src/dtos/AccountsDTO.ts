@@ -9,6 +9,7 @@ export interface AccountIn {
   }
   
 export interface AccountOut {
+  type?: string;
   id?: string;
   account_number?: string;
   user_id?: string;

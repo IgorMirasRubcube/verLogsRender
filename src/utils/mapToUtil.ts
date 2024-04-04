@@ -3,6 +3,7 @@ import { AddressIn } from "dtos/AddressesDTO";
 import { UserIn } from "dtos/UsersDTO";
 import { TransferIn } from "dtos/TransfersDTO";
 import { getRandom } from "./numberUtil";
+import { ExtractIn } from "dtos/ExtractsDTO";
 
 export abstract class MapTo {
     static UserIn = (body: any): UserIn => {
@@ -87,5 +88,30 @@ export abstract class MapTo {
             schedule_date,
             status,
         }
+    }
+
+    static ExtractIn = (query: any): ExtractIn => {
+        const {
+            type,
+            period,
+            sort,
+            periodStartDate,
+            periodEndDate
+        } = query;
+
+        let extractIn: ExtractIn = {
+            type: type,
+            sort: sort
+        };
+        if (type) extractIn.type = type;
+        if (sort) extractIn.sort = sort;
+        if (period) {
+            extractIn.period = period;
+        } else {
+            extractIn.periodStartDate = periodStartDate;
+            extractIn.periodEndDate = periodEndDate;
+        }
+    
+        return extractIn;
     }
 }

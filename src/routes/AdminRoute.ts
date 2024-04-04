@@ -9,8 +9,8 @@ const adminController = new AdminController();
 // @desc    Update an account balance
 // @acess   ADMIN
 routes.put('/accounts',
-    validate(ValidationRules.account_id),
-    validate(ValidationRules.transfer_value),
+    validate(ValidationRules.accountId),
+    validate(ValidationRules.balance),
     adminController.updateAccountBalance
 );
 

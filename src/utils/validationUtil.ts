@@ -6,11 +6,33 @@ import { Prisma } from '@prisma/client';
 export function isOnlyNumbers(sentence: string): boolean {
     const regex = /^\d+$/;
     return regex.test(sentence);
+}   
+
+export function isSortType(sort: string): boolean {
+    if (sort === 'older' || sort === 'newer') {
+        return true;
+    }
+    return false;
+}
+
+
+export function isValidPeriod(period: number): boolean {
+    if (period == 15 || period == 30 || period == 60 || period == 90) {
+        return true;
+    }
+    return false;
+}
+
+export function isExtractType(type: string): boolean {
+    if (type === 'all' || 'entrance' || 'exit' || 'future'){
+        return true;
+    }
+    return false;
 }
 
 export function isValidTransferValue(value: Prisma.Decimal): boolean {
-    return (value.toNumber() >= MIN_TRANSFER_VALUE 
-    && value.toNumber() <= MAX_TRANSFER_VALUE);
+    return (Number(value) >= MIN_TRANSFER_VALUE 
+    && Number(value) <= MAX_TRANSFER_VALUE);
 }
 
 export function isValidTransferStatus(status: string): boolean {

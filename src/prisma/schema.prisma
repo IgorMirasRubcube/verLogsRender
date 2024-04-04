@@ -41,6 +41,7 @@ model Account {
   bank                    String      @default("RubBank S.A.")
   agency                  String      @default("0001") @db.VarChar(4)
   account_number          String      @db.VarChar(8) @unique
+  type                    String      @db.VarChar(8) @default("checking")
   n_attempt               Int         @default(0)
   blocked                 Boolean     @default(false)
   block_date              DateTime?

@@ -15,6 +15,7 @@ export interface UserIn {
 }
 
 export interface UserOut {
+  cpf?: string;
   id: string;
   full_name?: string;
 }

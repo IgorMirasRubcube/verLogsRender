@@ -59,16 +59,154 @@ export default class TransferModel {
     })
   }
 
-  findByEmail = async (email: string) => {
-    return await prisma.user.findUnique({
-      where: { email: email }
+  getAllByAccountId = async (account_id: string,
+    periodStartDate: Date,
+    periodEndDate: Date,
+    sortType: string,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        OR: [
+          {
+            to_account_id: account_id,
+          },
+          {
+            from_account_id: account_id
+          },
+        ],
+        AND: {
+          created_at: {
+            gte: periodStartDate,
+            lte: periodEndDate
+          },
+        },
+      },
+      orderBy: {
+        created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields
     })
   }
 
-  findByCPF = async (cpf: string, selectFields: Record<string, boolean> = { id: true, cpf: true, password: true, full_name: true }) => {
-    return await prisma.user.findUnique({
-      where: { cpf: cpf },
-      select: selectFields,
-    });
+  getEntrancesByAccountId = async (account_id: string,
+    periodStartDate: Date,
+    periodEndDate: Date,
+    sortType: string,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        to_account_id: account_id,
+        AND: {
+          created_at: {
+            gte: periodStartDate,
+            lte: periodEndDate
+          },
+        },
+      },
+      orderBy: {
+        created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields
+    })
+  }
+
+  getExitsByAccountId = async (account_id: string,
+    periodStartDate: Date,
+    periodEndDate: Date,
+    sortType: string,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        from_account_id: account_id,
+        AND: {
+          created_at: {
+            gte: periodStartDate,
+            lte: periodEndDate
+          },
+        },
+      },
+      orderBy: {
+        created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields
+    })
+  }
+
+  getFuturesByAccountId = async (account_id: string,
+    sortType: string,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        AND: [
+          {
+            to_account_id: account_id,
+          },
+          {
+            is_scheduled: true,
+          },
+          {
+            schedule_date: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+      orderBy: {
+        created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields
+    })
   }
 };

@@ -32,9 +32,14 @@ routes.post('/cpf',
 // @desc    Verify if account balance is equal or greater transfer_value
 // @acess   Private
 routes.post('/balance',
-    validate(ValidationRules.transfer_value),
-    validate(ValidationRules.account_id),
+    validate(ValidationRules.transferValue),
+    validate(ValidationRules.accountId),
     accountController.verifyEnoughBalance
 );
+
+// @route   POST accounts/me
+// @desc    Get balance of main account
+// @acess   Private
+routes.get('/me', accountController.me);
 
 export default routes;

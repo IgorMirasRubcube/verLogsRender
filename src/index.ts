@@ -5,8 +5,8 @@ import addressesRoutes from "routes/AddressRoute";
 import accountsRoutes from "routes/AccountRoute";
 import validationsRoutes from "routes/ValidationRoute";
 import loginRoutes from "routes/LoginRoute";
-import transferRoutes from "routes/TransferRoute"
-// import adminRoutes from "routes/AdminRoute"
+import transfersRoutes from "routes/TransferRoute"
+import adminRoutes from "routes/AdminRoute"
 import { authentication } from "middlewares/auth";
 import { DateTime } from "luxon";
 
@@ -23,7 +23,7 @@ app.use("/addresses", authentication, addressesRoutes);
 app.use("/accounts", authentication, accountsRoutes);
 app.use("/validations", validationsRoutes);
 app.use("/login", loginRoutes);
-app.use("/transfers", authentication, transferRoutes);
+app.use("/transfers", authentication, transfersRoutes);
 app.use("/admin", adminRoutes); // add adminAuth later
 
 app.listen(process.env.PORT || 3344);

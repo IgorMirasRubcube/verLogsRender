@@ -13,6 +13,9 @@ import { containsSequence,
          isAfterNow,
          isValidTransferStatus,
          isValidTransferValue,
+         isExtractType,
+         isValidPeriod,
+         isSortType
        } from 'utils/validationUtil'
 
 export abstract class ValidationRules {
@@ -110,15 +113,20 @@ export abstract class ValidationRules {
         .withMessage('Please include a valid date format (YYYY-MM-DD)')
         .custom((schedule_date) => isAfterNow(schedule_date)),
       check('status')
+        .optional()
         .custom(status => isValidTransferStatus(status))
         .withMessage('Invalid transfer status')
     ];
 
-    static account_id: ValidationChain[] = [
-      check('id').isUUID()
-    ]
+    static accountId: ValidationChain[] = [
+      check('account_id').isUUID()
+    ];
 
-    static transfer_value: ValidationChain[] = [
+    static transferId: ValidationChain[] = [
+      check('transfer_id').isUUID()
+    ];
+
+    static transferValue: ValidationChain[] = [
       check('value')
         .isDecimal()
         .withMessage('Invalid value')
@@ -134,6 +142,18 @@ export abstract class ValidationRules {
         .withMessage('Do not include negative values')
     ];
 
+    static extract: ValidationChain[] = [
+      check('type')
+        .custom(type => isExtractType(type))
+        .withMessage('Invalid extract type'),
+      check('period')
+        .isInt()
+        .withMessage('Invalid period type (should be number)')
+        .custom(period => isValidPeriod(period))
+        .withMessage('Invalid period type (should be 15, 30, 60 or 90)'),
+      check('sort')
+        .custom(sort => isSortType(sort))
+    ];
 }
 
 export const validate = (schemas: ValidationChain[])  => {

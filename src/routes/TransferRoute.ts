@@ -6,12 +6,33 @@ import { validate ,ValidationRules } from 'validators/validator';
 const routes = Router();
 const transferController = new TransferController();
 
-// @route   POST transfer/
+// @route   POST transfers/
 // @desc    Create a transfer
 // @acess   Private
-routes.post('/', validate(ValidationRules.transfer) ,transferController.create);
+routes.post('/',
+    validate(ValidationRules.transfer),
+    validate(ValidationRules.transferPassword),
+    transferController.create
+);
+
+// @route   GET transfers/:account_id?
+// @desc    Get different extracts of an account
+// @acess   Private
+routes.get('/:account_id',
+    validate(ValidationRules.accountId),
+    validate(ValidationRules.extract),
+    transferController.getExtract
+);
+
+// @route   GET transfers/:id
+// @desc    Get details of a transfer
+// @acess   Private
+routes.get('/:id',
+    validate(ValidationRules.transferId),
+    transferController.get
+);
+
 routes.get('/', transferController.getAll);
-routes.get('/:id', transferController.get);
 routes.put('/:id', transferController.updatePassword);
 routes.delete('/:id', transferController.delete);
 

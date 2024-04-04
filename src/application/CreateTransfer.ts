@@ -47,12 +47,12 @@ export default class CreateTransfer {
 
             await transferModel.create(transfer);
             
-            const fromAccountNewBalance = fromAccount.balance.toNumber() - transfer.value.toNumber(); 
-            const toAccountNewBalance = toAccount.balance.toNumber() + transfer.value.toNumber(); 
+            const fromAccountNewBalance = Number(fromAccount.balance) - Number(transfer.value); 
+            const toAccountNewBalance = Number(toAccount.balance) + Number(transfer.value); 
 
             const [fromBalanceUpdated, toBalanceUpdated] = await Promise.all([
-                accountModel.updateBalance(transfer.from_account_id, fromAccountNewBalance),
-                accountModel.updateBalance(transfer.to_account_id, toAccountNewBalance)
+                accountModel.updateBalance(transfer.from_account_id, new Prisma.Decimal(fromAccountNewBalance)),
+                accountModel.updateBalance(transfer.to_account_id, new Prisma.Decimal(toAccountNewBalance))
             ]);
 
             return {

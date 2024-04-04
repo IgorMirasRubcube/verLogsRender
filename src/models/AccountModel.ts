@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { AccountIn } from 'dtos/AccountsDTO';
 
 const prisma = new PrismaClient();
@@ -32,6 +32,30 @@ export default class AccountModel {
     })  => {
     return await prisma.account.findUnique({
       where: { id },
+      select: selectFields,
+    });
+  }
+
+  me = async (id: string,
+    selectFields: Record<string, boolean> = {
+       id: true,
+       user_id: true,
+       transfer_password: true,
+       balance: true,
+       bank: true,
+       agency: true,
+       account_number: true,
+       n_attemp: true,
+       blocked: true,
+       block_date: true,
+       created_at: true,
+       updated_at: true 
+    })  => {
+    return await prisma.account.findFirst({
+      where: {
+        user_id: id,
+        type: "checking"
+      },
       select: selectFields,
     });
   }
@@ -101,7 +125,7 @@ export default class AccountModel {
       });
     }
 
-    updateBalance = async (id: string, balance: number) => {
+    updateBalance = async (id: string, balance: Prisma.Decimal) => {
       return await prisma.account.update({
         where: {
           id

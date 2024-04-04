@@ -16,7 +16,7 @@ export interface TransferIn {
 export interface TransferOut {
     from_account_id: string;
     to_account_id: string;
-    value: string;
+    value: Prisma.Decimal;
     description?: string;
     type?: string;
     is_scheduled?: boolean;

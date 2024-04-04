@@ -57,6 +57,27 @@ export default class AccountController {
     }
   }
 
+  me = async (req: Request, res: Response) => {
+    try {
+      const newAccount: AccountOut | null = await accountModel.me(req.user.id, { balance: true }) as AccountOut | null;
+
+      if (!newAccount?.balance) {
+        return res.status(404).json({
+          error: "ACC-06",
+          message: "Account not found",
+        });
+      }
+
+      res.status(200).json(newAccount);
+    } catch (e) {
+      console.log("Server Error", e);
+      res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  }
+
   getAll = async (req: Request, res: Response) => {
     try {
       const accounts: AccountOut[] | null = await accountModel.getAll();
