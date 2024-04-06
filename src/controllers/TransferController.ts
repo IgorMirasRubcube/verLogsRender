@@ -5,7 +5,7 @@ import UserModel from "models/UserModel";
 import TransferModel from "models/TransferModel";
 import CreateTransfer from "application/CreateTransfer";
 import { MapTo } from 'utils/mapToUtil'
-import { subtractDays } from "utils/dateUtil";
+import { CalculateDays } from "utils/dateUtil";
 import AccountModel from "models/AccountModel";
 import { AccountOut } from "dtos/AccountsDTO";
 import { UserOut } from "dtos/UsersDTO";
@@ -92,6 +92,7 @@ export default class TransferController {
         description: detailedTransfer.value,
         type: detailedTransfer.type,
         is_scheduled: detailedTransfer.is_scheduled,
+        schedule_date: detailedTransfer.schedule_date,
         status: detailedTransfer.status,
         created_at: detailedTransfer.created_at,
         updated_at: detailedTransfer.updated_at,
@@ -118,13 +119,13 @@ export default class TransferController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const users: UserOut[] | null = await userModel.getAll();
-      res.status(200).json(users);
+      const transfers: TransferOut[] | null = await transferModel.getAll() as TransferOut[];
+      res.status(200).json(transfers);
     } catch (e) {
-      console.log("Failed to get all users", e);
+      console.log("Failed to get all transfers", e);
       res.status(500).send({
-        error: "USR-03",
-        message: "Failed to get all users",
+        error: "TFR-03",
+        message: "Failed to get all transfers",
       });
     }
   };
@@ -181,25 +182,17 @@ export default class TransferController {
       periodEndDate = extract.periodEndDate;
     } else {
       if (extract.period){
-        periodStartDate = subtractDays(new Date(), extract.period);
+        if (extract.type === 'future') {
+          periodStartDate = CalculateDays.add(new Date(), extract.period);
+        } else {
+          periodStartDate = CalculateDays.subtract(new Date(), extract.period);
+        }
         periodEndDate = new Date();
       } else {
         return res.status(400).send({
           message: "Bad Request"
         })
       }
-    }
-    
-    
-    if (extract.period) {
-      periodStartDate = subtractDays(new Date(), extract.period);
-    } else {
-      if (extract.periodStartDate !== undefined) {
-        periodStartDate = extract.periodStartDate;
-      } else {
-
-      }
-      extract.periodEndDate !== undefined ? periodEndDate = extract.periodEndDate : null;
     }
 
     try {
@@ -244,6 +237,7 @@ export default class TransferController {
           transfers = await transferModel.getFuturesByAccountId(
             account_id,
             extract.sort,
+            periodEndDate,
             { id: true, value: true, type: true, status: true, created_at: true },
           ) as TransferOut[];
   

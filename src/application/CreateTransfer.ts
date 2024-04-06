@@ -45,21 +45,27 @@ export default class CreateTransfer {
                 throw new Error('Account do not have enough balance');
             }
 
+            transfer.is_scheduled ? transfer.status = "SCHEDULED" : transfer.status = "COMPLETED";
+
             await transferModel.create(transfer);
             
-            const fromAccountNewBalance = Number(fromAccount.balance) - Number(transfer.value); 
-            const toAccountNewBalance = Number(toAccount.balance) + Number(transfer.value); 
+            if (transfer.is_scheduled) {
+                return {};
+            } else {
+                const fromAccountNewBalance = Number(fromAccount.balance) - Number(transfer.value); 
+                const toAccountNewBalance = Number(toAccount.balance) + Number(transfer.value); 
 
-            const [fromBalanceUpdated, toBalanceUpdated] = await Promise.all([
-                accountModel.updateBalance(transfer.from_account_id, new Prisma.Decimal(fromAccountNewBalance)),
-                accountModel.updateBalance(transfer.to_account_id, new Prisma.Decimal(toAccountNewBalance))
-            ]);
+                const [fromBalanceUpdated, toBalanceUpdated] = await Promise.all([
+                    accountModel.updateBalance(transfer.from_account_id, new Prisma.Decimal(fromAccountNewBalance)),
+                    accountModel.updateBalance(transfer.to_account_id, new Prisma.Decimal(toAccountNewBalance))
+                ]);
 
-            return {
-                from_account_old_balance: fromAccount.balance,
-                from_account_new_balance: fromBalanceUpdated,
-                to_account_old_balance: toAccount.balance,
-                to_account_new_balance: toBalanceUpdated
+                return {
+                    from_account_old_balance: fromAccount.balance,
+                    from_account_new_balance: fromBalanceUpdated,
+                    to_account_old_balance: toAccount.balance,
+                    to_account_new_balance: toBalanceUpdated
+                };
             }
         } catch (e) {
             throw e;

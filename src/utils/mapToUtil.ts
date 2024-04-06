@@ -4,6 +4,7 @@ import { UserIn } from "dtos/UsersDTO";
 import { TransferIn } from "dtos/TransfersDTO";
 import { getRandom } from "./numberUtil";
 import { ExtractIn } from "dtos/ExtractsDTO";
+import { NotificationIn } from "dtos/NotificationsDTO";
 
 export abstract class MapTo {
     static UserIn = (body: any): UserIn => {
@@ -78,6 +79,8 @@ export abstract class MapTo {
             status,
         } = body
 
+        schedule_date = new Date(schedule_date);
+
         return {
             from_account_id,
             to_account_id,
@@ -108,10 +111,24 @@ export abstract class MapTo {
         if (period) {
             extractIn.period = period;
         } else {
-            extractIn.periodStartDate = periodStartDate;
-            extractIn.periodEndDate = periodEndDate;
+            extractIn.periodStartDate = new Date(periodStartDate);
+            extractIn.periodEndDate = new Date(periodEndDate);
         }
     
         return extractIn;
+    }
+
+    static NotificationIn = (body: any): NotificationIn => {
+        const {
+            transfer_id,
+            user_id,
+            text,
+        } = body
+
+        return {
+            transfer_id,
+            user_id,
+            text
+        }
     }
 }

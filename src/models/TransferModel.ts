@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, TransferStatus } from '@prisma/client';
 import { TransferIn } from 'dtos/TransfersDTO';
 
 const prisma = new PrismaClient();
@@ -19,22 +19,19 @@ export default class TransferModel {
   }
 
   get = async (id: string, selectFields: Record<string, boolean> = {
-      id: true,
-      full_name: true,
-      email: true,
-      phone: true,
-      cpf: true,
-      birth_date: true,
-      password: true,
-      n_attempt: true,
-      is_admin: true,
-      blocked: true,
-      block_date: true,
-      created_at: true,
-      updated_at: true,
-      address_id: true
-    }) => {
-    return await prisma.user.findFirst({
+    id: true,
+    from_account_id: true,
+    to_account_id: true,
+    value: true,
+    description: true,
+    type: true,
+    is_scheduled: true,
+    schedule_date: true,
+    status: true,
+    created_at: true,
+    updated_at: true,
+  }) => {
+    return await prisma.transfer.findFirst({
       where: { id: id },
       select: selectFields,
     });
@@ -48,13 +45,13 @@ export default class TransferModel {
     })
   }
 
-  update = async (id: string, password: string) => {
-    return await prisma.user.update({
+  updateStatus = async (id: string, status: TransferStatus) => {
+    return await prisma.transfer.update({
       where: {
         id
       },
       data: {
-        password: password,
+        status: status
       }
     })
   }
@@ -173,6 +170,7 @@ export default class TransferModel {
 
   getFuturesByAccountId = async (account_id: string,
     sortType: string,
+    periodEndDate: Date,
     selectFields: Record<string, boolean> = {
       id: true,
       from_account_id: true,
@@ -199,12 +197,48 @@ export default class TransferModel {
           {
             schedule_date: {
               gte: new Date(),
+              lte: periodEndDate,
             },
           },
         ],
       },
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields
+    })
+  }
+
+  getScheduledTransfersForPayment = async (
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        AND: [
+          {
+            is_scheduled: true,
+          },
+          {
+            status: "SCHEDULED",
+          },
+          {
+            schedule_date: {
+              lte: new Date(),
+            },
+          },
+        ],
       },
       select: selectFields
     })

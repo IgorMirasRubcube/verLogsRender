@@ -19,26 +19,37 @@ function getRandom(length){
 }
 
 
-const date = new Date('2022-09-12');
-const day = String(date.getDate());
-console.log(day)
+// const date = new Date('2022-09-12');
+// const day = String(date.getDate());
+// console.log(day)
 
-function hasBirthDate(birth_date) {
-    const year = String(birth_date.getFullYear());
-    let month = String(birth_date.getMonth() + 1);
-    const day = String(birth_date.getDate() + 1);
-    console.log(year)
+// function hasBirthDate(birth_date) {
+//     const year = String(birth_date.getFullYear());
+//     let month = String(birth_date.getMonth() + 1);
+//     const day = String(birth_date.getDate() + 1);
+//     console.log(year)
 
-    if (parseInt(day) < 10){
-        day = '0' + day;
-        console.log(day);
+//     if (parseInt(day) < 10){
+//         day = '0' + day;
+//         console.log(day);
+//     }
+
+//     if (parseInt(month) < 10){
+//         month = '0' + month;
+//         console.log(month);
+//     }
+//     console.log(day+month);
+// }
+
+// hasBirthDate(date)
+const array = [1, 3, 5, 7, 9];
+
+let string = array.map(number => {
+    console.log(number);
+    
+    if (number === 5) {
+        break;
     }
+});
 
-    if (parseInt(month) < 10){
-        month = '0' + month;
-        console.log(month);
-    }
-    console.log(day+month);
-}
-
-hasBirthDate(date)
+console.log(string)

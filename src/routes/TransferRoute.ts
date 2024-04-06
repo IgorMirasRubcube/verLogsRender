@@ -24,10 +24,10 @@ routes.get('/:account_id',
     transferController.getExtract
 );
 
-// @route   GET transfers/:id
+// @route   GET transfers/detailed/:id
 // @desc    Get details of a transfer
 // @acess   Private
-routes.get('/:id',
+routes.get('/detailed/:transfer_id',
     validate(ValidationRules.transferId),
     transferController.get
 );

@@ -30,6 +30,7 @@ model User {
   address                 Address?  @relation(fields: [address_id], references: [id])
   address_id              Int?      @unique
   accounts                Account[]
+  notifications           Notification[]
 }
 
 model Account {
@@ -85,7 +86,10 @@ model Transfer {
 model Notification {
   id                      Int         @id @default(autoincrement())
   transfer                Transfer?   @relation(fields: [transfer_id], references: [id])
-  transfer_id             String      @db.Uuid        
+  transfer_id             String      @db.Uuid
+  user                    User        @relation(fields: [user_id], references: [id])
+  user_id                 String      @db.Uuid
+  text                    String        
   is_favorite             Boolean     @default(false)
   viewed_flag             Boolean     @default(false)
   created_at              DateTime    @default(now())

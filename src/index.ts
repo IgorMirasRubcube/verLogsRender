@@ -9,12 +9,22 @@ import transfersRoutes from "routes/TransferRoute"
 import adminRoutes from "routes/AdminRoute"
 import { authentication } from "middlewares/auth";
 import { DateTime } from "luxon";
+import { schedule } from "node-cron";
+import PayScheduledTransfers from "application/PayScheduledTransfers"
 
 DateTime.local().setZone("America/Sao_Paulo");
 
 const app = express();
 
 app.use(express.json());
+
+schedule("1 0 * * *", () => {
+  const payScheduledTransfers = new PayScheduledTransfers();
+  payScheduledTransfers.execute();
+}, {
+  timezone: "America/Sao_Paulo"
+});
+
 app.get("/", (req, res) => {
   return res.send("Hello World");
 });
