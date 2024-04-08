@@ -40,8 +40,8 @@ export default class CreateTransfer {
             if (!toAccount?.balance) {
                 throw new Error('To account not found');
             }
-
-            if (fromAccount.balance < toAccount.balance){
+            
+            if (Number(fromAccount.balance) < Number(transfer.value)) {
                 throw new Error('Account do not have enough balance');
             }
 

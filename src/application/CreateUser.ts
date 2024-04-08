@@ -1,5 +1,5 @@
 import { AccountIn } from "dtos/AccountsDTO";
-import { AddressIn } from "dtos/AddressesDTO";
+import { AddressIn, AddressOut } from "dtos/AddressesDTO";
 import { UserIn, UserOut } from "dtos/UsersDTO";
 import UserModel from "models/UserModel";
 import { genSalt, hash } from 'bcryptjs'
@@ -26,9 +26,10 @@ export default class CreateUser {
             user.password = await hash(user.password, salt);
             account.transfer_password = await hash(account.transfer_password, salt);
             
+            const newAddress: AddressOut | null = await addressModel.create(address) as AddressOut;
+            
+            user.address_id = newAddress.id;
             const user_id: UserOut = await userModel.create(user);
-
-            await addressModel.create(address);
 
             account.user_id = user_id.id;
             await accountModel.create(account);

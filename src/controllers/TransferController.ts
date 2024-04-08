@@ -134,10 +134,10 @@ export default class TransferController {
     try {
       const id: string = req.params.id;
       const password: string = req.body.password;
-      const userUpdated: UserOut | null = await userModel.update(
+      const userUpdated: UserOut | null = await userModel.updatePassword(
         id,
         password
-      );
+      ) as UserOut;
 
       if (userUpdated) {
         res.status(200).json(userUpdated);
@@ -159,7 +159,7 @@ export default class TransferController {
   delete = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const userDeleted: UserOut = await userModel.delete(id);
+      const userDeleted: UserOut = await userModel.delete(id) as UserOut;
       res.status(200).json(userDeleted);
     } catch (e) {
       console.log("Failed to delete user", e);
@@ -183,11 +183,12 @@ export default class TransferController {
     } else {
       if (extract.period){
         if (extract.type === 'future') {
-          periodStartDate = CalculateDays.add(new Date(), extract.period);
+          periodStartDate = new Date();
+          periodEndDate = CalculateDays.add(new Date(), extract.period);
         } else {
           periodStartDate = CalculateDays.subtract(new Date(), extract.period);
+          periodEndDate = new Date();
         }
-        periodEndDate = new Date();
       } else {
         return res.status(400).send({
           message: "Bad Request"
@@ -203,7 +204,7 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
-            { id: true, value: true, type: true, status: true, created_at: true },
+            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
@@ -215,7 +216,7 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
-            { id: true, value: true, type: true, status: true, created_at: true },
+            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
@@ -227,7 +228,7 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
-            { id: true, value: true, type: true, status: true, created_at: true },
+            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
@@ -238,7 +239,7 @@ export default class TransferController {
             account_id,
             extract.sort,
             periodEndDate,
-            { id: true, value: true, type: true, status: true, created_at: true },
+            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
           res.status(200).json(transfers);

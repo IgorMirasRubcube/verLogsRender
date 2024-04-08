@@ -13,11 +13,12 @@ export interface AddressIn {
 // Change AddressOut later if necessary
 
 export interface AddressOut {
-  cep: string;
-  street: string;
-  number: string;
+  id?: number;
+  cep?: string;
+  street?: string;
+  number?: string;
   complement?: string | null;    // prisma returns null if not exists (null !== undefined)
-  neighborhood: string;
-  city: string;
-  state: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
 }

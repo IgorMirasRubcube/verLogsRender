@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import { AddressIn, AddressOut } from "dtos/AddressesDTO";
 import AddressModel from "models/AddressModel";
+import UserModel from "models/UserModel";
+import { UserOut } from "dtos/UsersDTO";
 
 const addressModel = new AddressModel();
+const userModel = new UserModel();
 
 export default class AddressController {
   create = async (req: Request, res: Response) => {
@@ -56,10 +59,20 @@ export default class AddressController {
 
   update = async (req: Request, res: Response) => {
     try {
-      const id: number = parseInt(req.params.id);
+      const user_id: string = req.user.id;
       const updateAddress: AddressIn = req.body;
+
+      const user: UserOut | null = await userModel.get(user_id, {address_id: true}) as UserOut;
+
+      if (!user.address_id) {
+        return res.status(404).json({
+          error: "ADR-06",
+          message: "Address not found.",
+        });
+      }
+
       const addressUpdated: AddressOut | null = await addressModel.update(
-        id,
+        user.address_id,
         updateAddress
       );
 

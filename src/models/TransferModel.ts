@@ -189,7 +189,7 @@ export default class TransferModel {
       where: {
         AND: [
           {
-            to_account_id: account_id,
+            from_account_id: account_id,
           },
           {
             is_scheduled: true,

@@ -68,13 +68,13 @@ export default class AccountModel {
     })
   }
 
-  update = async (id: string, account: AccountIn) => {
+  update = async (id: string, transfer_password: string) => {
     return await prisma.account.update({
       where: {
         id
       },
       data: {
-        ...account
+        transfer_password: transfer_password,
       }
     })
   }

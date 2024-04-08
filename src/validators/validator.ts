@@ -157,7 +157,6 @@ export abstract class ValidationRules {
 }
 
 export const validate = (schemas: ValidationChain[])  => {
-    console.log('passou aq')
     return async (req: Request, res: Response, next: NextFunction) => {
       await Promise.all(schemas.map((schema) => schema.run(req)));
 

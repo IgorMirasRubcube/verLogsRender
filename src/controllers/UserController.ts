@@ -6,6 +6,7 @@ import { AddressIn } from "dtos/AddressesDTO";
 import { AccountIn } from "dtos/AccountsDTO";
 import CreateUser from "application/CreateUser";
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import { genSalt, hash } from 'bcryptjs'
 
 const userModel = new UserModel();
 
@@ -67,7 +68,7 @@ export default class UserController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const users: UserOut[] | null = await userModel.getAll();
+      const users: UserOut[] | null = await userModel.getAll() as UserOut[];
       res.status(200).json(users);
     } catch (e) {
       console.log("Failed to get all users", e);
@@ -80,12 +81,16 @@ export default class UserController {
 
   updatePassword = async (req: Request, res: Response) => {
     try {
-      const id: string = req.params.id;
-      const password: string = req.body.password;
-      const userUpdated: UserOut | null = await userModel.update(
+      const id: string = req.user.id;
+      let password: string = req.body.password;
+
+      const salt = await genSalt(10);
+      password = await hash(password, salt);
+
+      const userUpdated: UserOut | null = await userModel.updatePassword(
         id,
         password
-      );
+      ) as UserOut;
 
       if (userUpdated) {
         res.status(200).json(userUpdated);
@@ -107,7 +112,7 @@ export default class UserController {
   delete = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const userDeleted: UserOut = await userModel.delete(id);
+      const userDeleted: UserOut = await userModel.delete(id) as UserOut;
       res.status(200).json(userDeleted);
     } catch (e) {
       console.log("Failed to delete user", e);

@@ -48,7 +48,7 @@ export default class UserModel {
     })
   }
 
-  update = async (id: string, password: string) => {
+  updatePassword = async (id: string, password: string) => {
     return await prisma.user.update({
       where: {
         id

@@ -35,7 +35,7 @@ export default class PayScheduledTransfers {
                 
                 if (!transfer?.id) { return; }
 
-                if (fromAccount.balance && (fromAccount.balance < transfer.value)) {
+                if (fromAccount.balance && (Number(fromAccount.balance) < Number(transfer.value))) {
                     await transferModel.updateStatus(transfer.id, "CANCELED");
                     
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({

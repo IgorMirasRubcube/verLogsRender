@@ -5,6 +5,8 @@ import { getRandom } from "utils/numberUtil";
 import UserModel from "models/UserModel";
 import { UserOut } from "dtos/UsersDTO";
 import { Prisma } from "@prisma/client";
+import { genSalt, hash } from 'bcryptjs'
+import { hasBirthDate } from "utils/validationUtil"
 
 const accountModel = new AccountModel();
 const userModel = new UserModel();
@@ -57,7 +59,7 @@ export default class AccountController {
     }
   }
 
-  me = async (req: Request, res: Response) => {
+  main = async (req: Request, res: Response) => {
     try {
       const newAccount: AccountOut | null = await accountModel.me(req.user.id, { balance: true }) as AccountOut | null;
 
@@ -94,10 +96,30 @@ export default class AccountController {
   update = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const updateAccount: AccountIn = req.body;
+      let transfer_password: string = req.body.transfer_password;
+
+      const user: UserOut | null = await userModel.get(req.user.id, {birth_date: true}) as UserOut;
+
+      if (!user?.birth_date) {
+        return res.status(500).send({
+          error: "SRV-01",
+          message: "Server Error",
+        });
+      }
+
+      if (hasBirthDate(transfer_password, user.birth_date)) {
+        return res.status(422).json({
+          error: "ACC-08",
+          message: "Transfer password cannot have birth date infos",
+        })
+      }
+
+      const salt = await genSalt(10);
+      transfer_password = await hash(transfer_password, salt);
+
       const accountUpdated: AccountOut | null = await accountModel.update(
         id,
-        updateAccount
+        transfer_password
       );
 
       if (accountUpdated) {
@@ -176,11 +198,9 @@ export default class AccountController {
   getAllByCPF = async (req: Request, res: Response) => {
     try {
       const { cpf } : { cpf: string } = req.body;
-      console.log('cpf: ', cpf);
       const newUser: UserOut | null = await userModel.findByCPF(cpf, {id: true, full_name: true }) as UserOut | null;
-      console.log('newUser: ', newUser);
 
-      if (!newUser) {
+      if (!newUser?.id) {
         return res.status(404).json({
           error: "ACC-06",
           message: "Account not found",
@@ -193,6 +213,26 @@ export default class AccountController {
 
       res.status(200).json({
         full_name: newUser.full_name,
+        accounts: accounts
+      });
+    } catch (e) {
+      console.log("Server Error", e);
+      res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  };
+
+  getAllLoggedUser = async (req: Request, res: Response) => {
+    try {
+      const user_id: string = req.user.id;
+
+      const accounts: AccountOut[] | null = await accountModel.getAllByUserId(user_id, {
+        id: true, bank: true, agency: true, account_number: true
+      }) as AccountOut[] | null;
+
+      res.status(200).json({
         accounts: accounts
       });
     } catch (e) {

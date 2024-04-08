@@ -7,6 +7,7 @@ import validationsRoutes from "routes/ValidationRoute";
 import loginRoutes from "routes/LoginRoute";
 import transfersRoutes from "routes/TransferRoute"
 import adminRoutes from "routes/AdminRoute"
+import notificationsRoutes from "routes/NotificationRoute";
 import { authentication } from "middlewares/auth";
 import { DateTime } from "luxon";
 import { schedule } from "node-cron";
@@ -21,6 +22,7 @@ app.use(express.json());
 schedule("1 0 * * *", () => {
   const payScheduledTransfers = new PayScheduledTransfers();
   payScheduledTransfers.execute();
+  console.log("Scheduled transfers paid");
 }, {
   timezone: "America/Sao_Paulo"
 });
@@ -35,5 +37,5 @@ app.use("/validations", validationsRoutes);
 app.use("/login", loginRoutes);
 app.use("/transfers", authentication, transfersRoutes);
 app.use("/admin", adminRoutes); // add adminAuth later
-
+app.use("/notifications", authentication, notificationsRoutes);
 app.listen(process.env.PORT || 3344);

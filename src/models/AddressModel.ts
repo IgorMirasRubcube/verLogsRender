@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { AddressIn } from 'dtos/AddressDTO';
+import { AddressIn } from 'dtos/AddressesDTO';
 
 const prisma = new PrismaClient();
 
@@ -7,7 +7,10 @@ export default class AddressModel {
 
   create = async (address: AddressIn) => {
     return await prisma.address.create({
-      data: address
+      data: address,
+      select: {
+        id: true,
+      }
     });
   }
 
@@ -37,7 +40,8 @@ export default class AddressModel {
         id
       },
       data: {
-        ...address
+        ...address,
+        updated_at: new Date(),
       }
     })
   }

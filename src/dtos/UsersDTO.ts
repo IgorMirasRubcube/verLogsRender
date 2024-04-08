@@ -16,8 +16,10 @@ export interface UserIn {
 
 export interface UserOut {
   cpf?: string;
-  id: string;
+  id?: string;
   full_name?: string;
+  address_id?: number;
+  birth_date?: Date;
 }
 
 export interface UserUpdate {   // Alterar senha do App
