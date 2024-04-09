@@ -95,8 +95,24 @@ export default class AccountController {
 
   update = async (req: Request, res: Response) => {
     try {
-      const id: string = req.params.id;
+      const account_id: string = req.params.id;
       let transfer_password: string = req.body.transfer_password;
+      
+      const account: AccountOut | null = await accountModel.get(account_id, {user_id: true});
+
+      if (!account?.user_id) {
+        return res.status(500).send({
+          error: "SRV-01",
+          message: "Server Error",
+        });
+      }
+
+      if (account.user_id !== req.user.id) {
+        return res.status(403).json({
+          error: "USR-08",
+          message: "Not authorized"
+        });
+      }
 
       const user: UserOut | null = await userModel.get(req.user.id, {birth_date: true}) as UserOut;
 
@@ -118,7 +134,7 @@ export default class AccountController {
       transfer_password = await hash(transfer_password, salt);
 
       const accountUpdated: AccountOut | null = await accountModel.update(
-        id,
+        account_id,
         transfer_password
       );
 
