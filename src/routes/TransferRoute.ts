@@ -31,7 +31,7 @@ routes.get('/detailed/:transfer_id',
 routes.put('/:transfer_id',
     validate(ValidationRules.transferId),
     validate(ValidationRules.transferPassword),
-    transferController.cancelTransfer
+    transferController.cancelScheduledTransfer
 );
 
 

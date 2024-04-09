@@ -269,7 +269,7 @@ export default class TransferController {
     }
   }
 
-  cancelTransfer = async (req: Request, res: Response) => {
+  cancelScheduledTransfer = async (req: Request, res: Response) => {
     const transfer_id: string = req.params.transfer_id;
     const transfer_password: string = req.body.transfer_password;
 
