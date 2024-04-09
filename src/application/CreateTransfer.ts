@@ -10,7 +10,7 @@ export default class CreateTransfer {
 
     }
 
-    async execute(transfer: TransferIn, transfer_password: string): Promise<{}> {
+    async execute(transfer: TransferIn, transfer_password: string, user_id: string): Promise<{}> {
         const transferModel = new TransferModel();
         const accountModel = new AccountModel();
 
@@ -20,11 +20,15 @@ export default class CreateTransfer {
 
         try {
             const fromAccount: AccountOut | null = await accountModel.get(transfer.from_account_id, {
-                balance: true, transfer_password: true
+                balance: true, transfer_password: true, user_id: true
             }) as AccountOut | null;
             
-            if (!fromAccount?.balance || !fromAccount?.transfer_password) {
+            if (!fromAccount?.balance || !fromAccount?.transfer_password || !fromAccount?.user_id) {
                 throw new Error('From account not found');
+            }
+
+            if (user_id !== fromAccount.user_id) {
+                throw new Error('Not authorized');
             }
 
             const isMatch = await compare(transfer_password, fromAccount.transfer_password);

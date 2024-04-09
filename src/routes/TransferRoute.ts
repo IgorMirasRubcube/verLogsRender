@@ -29,7 +29,7 @@ routes.get('/:account_id',
 // @acess   Private
 routes.get('/detailed/:transfer_id',
     validate(ValidationRules.transferId),
-    transferController.get
+    transferController.getDetailed
 );
 
 routes.get('/', transferController.getAll);

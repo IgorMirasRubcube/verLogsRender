@@ -18,10 +18,11 @@ export default class TransferController {
   create = async (req: Request, res: Response) => {
     const transfer: TransferIn = MapTo.TransferIn(req.body);
     const transfer_password: string = req.body.transfer_password;
+    const user_id: string = req.user.id;
     const createTransfer = new CreateTransfer();
     
     try {
-      let balances: {} = await createTransfer.execute(transfer, transfer_password);
+      let balances: {} = await createTransfer.execute(transfer, transfer_password, user_id);
       res.status(201).json(balances);
     } catch (e) {
       console.log("Failed to create transfer", e);
@@ -32,9 +33,9 @@ export default class TransferController {
     }
   };
 
-  get = async (req: Request, res: Response) => {
+  getDetailed = async (req: Request, res: Response) => {
     try {
-      const id: string = req.params.id;
+      const id: string = req.params.transfer_id;
       const detailedTransfer: TransferOut | null = await transferModel.get(
         id,
         {
@@ -66,6 +67,13 @@ export default class TransferController {
         return res.status(404).json({
           error: "ACC-06",
           message: "Account not found",
+        });
+      }
+
+      if (req.user.id !== fromAccount.user_id && req.user.id !== toAccount.user_id) {
+        return res.status(403).json({
+          error: "USR-08",
+          message: "Not authorized"
         });
       }
 
