@@ -89,6 +89,7 @@ export default class TransferModel {
             gte: periodStartDate,
             lte: periodEndDate
           },
+          status: "COMPLETED" || "FAILED" || "SCHEDULED",
         },
       },
       orderBy: {
@@ -124,6 +125,7 @@ export default class TransferModel {
             gte: periodStartDate,
             lte: periodEndDate
           },
+          status: "COMPLETED" || "FAILED" || "SCHEDULED",
         },
       },
       orderBy: {
@@ -159,6 +161,7 @@ export default class TransferModel {
             gte: periodStartDate,
             lte: periodEndDate
           },
+          status: "COMPLETED" || "FAILED" || "SCHEDULED",
         },
       },
       orderBy: {
@@ -199,6 +202,9 @@ export default class TransferModel {
               gte: new Date(),
               lte: periodEndDate,
             },
+          },
+          {
+            status: "SCHEDULED",
           },
         ],
       },

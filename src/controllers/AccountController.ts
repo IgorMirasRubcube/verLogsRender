@@ -25,7 +25,54 @@ export default class AccountController {
         message: "Failed to create account",
       });
     }
-  };
+  }
+
+  getById = async (req: Request, res: Response) => {
+    try {
+      const account_id: string = req.params.account_id;
+      const account: AccountOut | null = await accountModel.get(account_id,
+        { user_id: true, account_number: true, agency: true, bank: true }
+      );
+
+      if (account?.user_id && req.user.id !== account.user_id) {
+        return res.status(403).json({
+          error: "USR-08",
+          message: "Not authorized"
+        });
+      }
+      if (!account?.user_id) {
+        return res.status(404).json({
+          error: "ACC-06",
+          message: "Account not found",
+        });
+      }
+
+      const user: UserOut | null = await userModel.get(account.user_id, 
+        { full_name: true, cpf: true }
+      );
+
+      if (!user?.full_name || !user?.cpf) {
+        return res.status(500).send({
+          error: "SRV-01",
+          message: "Server Error",
+        });
+      }
+
+      res.status(200).json({
+        account_number: account.account_number,
+        agency: account.agency,
+        bank: account.bank,
+        full_name: user.full_name,
+        cpf: user.cpf
+      });
+    } catch (e) {
+      console.log("Failed to create account", e);
+      res.status(500).send({
+        error: "ACC-01",
+        message: "Failed to create account",
+      });
+    }
+  }
 
   verifyEnoughBalance = async (req: Request, res: Response) => {
     try {
@@ -95,7 +142,7 @@ export default class AccountController {
 
   update = async (req: Request, res: Response) => {
     try {
-      const account_id: string = req.params.id;
+      const account_id: string = req.params.account_id;
       let transfer_password: string = req.body.transfer_password;
       
       const account: AccountOut | null = await accountModel.get(account_id, {user_id: true});

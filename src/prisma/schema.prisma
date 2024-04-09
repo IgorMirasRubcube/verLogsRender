@@ -100,4 +100,5 @@ enum TransferStatus {
   SCHEDULED
   COMPLETED
   CANCELED
+  FAILED
 }

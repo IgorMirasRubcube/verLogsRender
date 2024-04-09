@@ -36,12 +36,12 @@ export default class PayScheduledTransfers {
                 if (!transfer?.id) { return; }
 
                 if (fromAccount.balance && (Number(fromAccount.balance) < Number(transfer.value))) {
-                    await transferModel.updateStatus(transfer.id, "CANCELED");
+                    await transferModel.updateStatus(transfer.id, "FAILED");
                     
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         user_id: fromAccount.user_id,
-                        text: `Transfer Scheduled to ${transfer.schedule_date} in value of R$${transfer.value} CANCELED (Not enough balance)`  
+                        text: `Transfer Scheduled to ${transfer.schedule_date} in value of R$${transfer.value} FAILED (Not enough balance)`  
                     });
                     await notificationModel.create(notificationFromUser);
                 } else {

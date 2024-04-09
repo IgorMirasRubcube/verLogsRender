@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "TransferStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED');
+CREATE TYPE "TransferStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED', 'FAILED');
 
 -- CreateTable
 CREATE TABLE "User" (

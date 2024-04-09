@@ -7,7 +7,7 @@ export interface RequestWithUser extends Request {
   };
 }
 
-export const authentication = (req: Request, res:Response, next: NextFunction) => {
+export const authentication = (req: Request, res: Response, next: NextFunction) => {
 	// Get token from header
 	const token = req.header('x-auth-token');
 

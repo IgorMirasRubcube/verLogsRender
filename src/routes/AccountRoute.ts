@@ -24,10 +24,22 @@ routes.get('/:agency/:account_number',
 // @acess   Private
 routes.get('/myaccounts', accountController.getAllLoggedUser);
 
-// @route   PUT accounts/:id/transferpassword
+// @route   GET accounts/:account_id
+// @desc    Get infos of an account by account_id
+// @acess   Private
+routes.get('/:account_id', validate(ValidationRules.accountId) ,accountController.getById);
+
+
+
+// @route   PUT accounts/:account_id/transferpassword
 // @desc    Update transfer password of an account
 // @acess   Private
-routes.put('/:id/transferpassword', validate(ValidationRules.transferPassword), accountController.update);
+routes.put('/:account_id/transferpassword',
+    validate(ValidationRules.transferPassword),
+    validate(ValidationRules.accountId),
+    accountController.update
+);
+
 
 
 // @route   POST accounts/cpf
@@ -38,7 +50,6 @@ routes.post('/cpf',
     accountController.getAllByCPF
 );
 
-
 // @route   POST accounts/balance
 // @desc    Verify if account balance is equal or greater transfer_value
 // @acess   Private
@@ -48,9 +59,9 @@ routes.post('/balance',
     accountController.verifyEnoughBalance
 );
 
-// @route   POST accounts/me
+// @route   GET accounts/main
 // @desc    Get balance of main account
 // @acess   Private
-routes.get('/main', accountController.main);
+routes.get('/main',accountController.main);
 
 export default routes;

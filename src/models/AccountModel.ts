@@ -36,7 +36,7 @@ export default class AccountModel {
     });
   }
 
-  me = async (id: string,
+  me = async (user_id: string,
     selectFields: Record<string, boolean> = {
        id: true,
        user_id: true,
@@ -53,7 +53,7 @@ export default class AccountModel {
     })  => {
     return await prisma.account.findFirst({
       where: {
-        user_id: id,
+        user_id: user_id,
         type: "checking"
       },
       select: selectFields,
