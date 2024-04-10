@@ -13,6 +13,7 @@ import { DateTime } from "luxon";
 import { schedule } from "node-cron";
 import PayScheduledTransfers from "application/PayScheduledTransfers"
 import ResetUserAttempt from "application/ResetUserAttempt";
+import axios from "axios";
 
 DateTime.local().setZone("America/Sao_Paulo");
 
@@ -32,6 +33,13 @@ schedule("0 2 15 * *", () => {
   const resetUserAttempt = new ResetUserAttempt();
   resetUserAttempt.execute();
   console.log("n_attempt of non-blocked users reseted");
+}, {
+  timezone: "America/Sao_Paulo"
+});
+
+schedule("*/5 * * * *", () => {
+  axios.get('https://rubcamp-3-backend-igormiras.onrender.com/');
+  console.log('consultou')
 }, {
   timezone: "America/Sao_Paulo"
 });
