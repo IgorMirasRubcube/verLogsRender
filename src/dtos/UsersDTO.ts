@@ -20,6 +20,8 @@ export interface UserOut {
   full_name?: string;
   address_id?: number;
   birth_date?: Date;
+  n_attempt?: number;
+  blocked?: boolean;
 }
 
 export interface UserUpdate {   // Alterar senha do App
@@ -35,4 +37,5 @@ export interface UserLoginIn {
 export interface UserLoginOut {
   id: string;
   password: string;
+  blocked: true;
 }

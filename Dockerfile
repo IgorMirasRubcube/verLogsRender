@@ -6,12 +6,19 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
-# COPY .env
-# COPY .env.docker.example .env
-
 # Install app dependencies
 RUN yarn install
 
-EXPOSE 3344
+# Install OpenSSL
+RUN apt-get update && apt install -y openssl
 
-CMD [ "yarn", "start" ]
+# prisma global
+RUN npm i -g prisma
+
+# run migration
+RUN npx prisma generate
+
+EXPOSE 3344
+EXPOSE 5555
+
+CMD [ "yarn", "dev" ]

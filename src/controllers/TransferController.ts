@@ -46,7 +46,7 @@ export default class TransferController {
         }
       ) as TransferOut;
 
-      if (!detailedTransfer) {
+      if (!detailedTransfer?.from_account_id || !detailedTransfer?.to_account_id) {
         return res.status(404).json({
           error: "TRF-06",
           message: "Transfer not found.",
@@ -285,48 +285,74 @@ export default class TransferController {
         });
       }
 
-      if (transfer.status !== "SCHEDULED") {
-        return res.status(409).json({
-          error: "TRF-09",
-          message: "You can cancel only scheduled transfers"
-        });
-      }
-  
       const account: AccountOut | null = await accountModel.get(transfer.from_account_id,
-        { transfer_password: true, user_id: true }
+        { transfer_password: true, user_id: true, blocked: true }
       );
-  
+
       if (!account?.transfer_password || !account?.user_id) {
         return res.status(404).json({
           error: "TRF-06",
           message: "Transfer not found.",
         });
       }
-  
+      
       const user: UserOut | null = await userModel.get(account.user_id, 
         { id: true }
       );
-  
+
       if (!user?.id) {
         return res.status(404).json({
           error: "TRF-06",
           message: "Transfer not found.",
         });
       }
-  
+      
       if (req.user.id !== user.id) {
         return res.status(403).json({
           error: "USR-08",
           message: "Not authorized"
         });
       }
-  
+
+      if (transfer.status !== "SCHEDULED") {
+        return res.status(409).json({
+          error: "TRF-09",
+          message: "You can cancel only scheduled transfers"
+        });
+      }
+
       const isMatch = await compare(transfer_password, account.transfer_password);
   
       if (!isMatch) {
+        const accountAttempt: AccountOut | null = await accountModel.incrementAttempt(
+          transfer.from_account_id, {n_attempt: true}
+        ) as AccountOut;
+
+        if (typeof accountAttempt.n_attempt !== 'number') { // if n_attempt is undefined
+          return res.status(500).send({
+            error: "SRV-01",
+            message: "Server Error",
+          });
+        }
+
+        if (accountAttempt.n_attempt >= 3) {
+          await accountModel.blockAccount(transfer.from_account_id);
+          return res.status(403).json({
+            error: "ACC-09",
+            message: "ACCOUNT BLOCKED"
+          });
+        }
+
         return res.status(403).json({
           error: "TFR-08",
           message: "Wrong password"
+        });
+      }
+
+      if (account.blocked) {
+        return res.status(403).json({
+          error: "ACC-09",
+          message: "ACCOUNT BLOCKED"
         });
       }
 

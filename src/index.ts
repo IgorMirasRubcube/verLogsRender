@@ -12,6 +12,7 @@ import { authentication } from "middlewares/auth";
 import { DateTime } from "luxon";
 import { schedule } from "node-cron";
 import PayScheduledTransfers from "application/PayScheduledTransfers"
+import ResetUserAttempt from "application/ResetUserAttempt";
 
 DateTime.local().setZone("America/Sao_Paulo");
 
@@ -23,6 +24,14 @@ schedule("1 0 * * *", () => {
   const payScheduledTransfers = new PayScheduledTransfers();
   payScheduledTransfers.execute();
   console.log("Scheduled transfers paid");
+}, {
+  timezone: "America/Sao_Paulo"
+});
+
+schedule("0 2 15 * *", () => {
+  const resetUserAttempt = new ResetUserAttempt();
+  resetUserAttempt.execute();
+  console.log("n_attempt of non-blocked users reseted");
 }, {
   timezone: "America/Sao_Paulo"
 });

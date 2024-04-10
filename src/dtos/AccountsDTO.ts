@@ -17,6 +17,8 @@ export interface AccountOut {
   agency?: string;
   balance?: Prisma.Decimal;
   transfer_password?: string;
+  n_attempt?: number;
+  blocked?: boolean;
 }
 
 export interface AccountUpdate {  // Alterar senha transacional

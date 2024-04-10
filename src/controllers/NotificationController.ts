@@ -9,7 +9,7 @@ export default class NotificationController {
     try {
         const notifications: NotificationOut[] | null = await notificationModel
             .getAll() as NotificationOut[];
-      
+        
         res.status(200).json(notifications);
     } catch (e) {
       console.log("Server Error", e);

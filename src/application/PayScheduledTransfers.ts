@@ -21,8 +21,12 @@ export default class PayScheduledTransfers {
             const scheduledTransfers: TransferOut[] = await transferModel.getScheduledTransfersForPayment(
                 {id: true, from_account_id: true, to_account_id: true, value: true, schedule_date: true}
             ) as TransferOut[];
-
+            
             for (const transfer of scheduledTransfers) {
+                if (!transfer?.from_account_id || !transfer?.to_account_id) {
+                    return;
+                }
+                
                 const fromAccount: AccountOut = await accountModel.get(
                     transfer.from_account_id,
                     {user_id: true, balance: true}

@@ -122,6 +122,10 @@ export abstract class ValidationRules {
       check('account_id').isUUID()
     ];
 
+    static userId: ValidationChain[] = [
+      check('user_id').isUUID()
+    ];
+
     static transferId: ValidationChain[] = [
       check('transfer_id').isUUID()
     ];

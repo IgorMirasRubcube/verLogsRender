@@ -5,12 +5,22 @@ const prisma = new PrismaClient();
 
 export default class TransferModel {
 
-  create = async (transfer: TransferIn) => {
+  create = async (transfer: TransferIn, selectFields: Record<string, boolean> = {
+    id: true,
+    from_account_id: true,
+    to_account_id: true,
+    value: true,
+    description: true,
+    type: true,
+    is_scheduled: true,
+    schedule_date: true,
+    status: true,
+    created_at: true,
+    updated_at: true,
+  }) => {
     return await prisma.transfer.create({
       data: transfer,
-      select: {
-        id: true
-      },
+      select: selectFields
     })
   }
 
@@ -204,7 +214,7 @@ export default class TransferModel {
             },
           },
           {
-            status: "SCHEDULED",
+            status: "SCHEDULED" || "FAILED",
           },
         ],
       },

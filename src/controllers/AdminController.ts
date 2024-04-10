@@ -3,8 +3,10 @@ import { AccountIn, AccountOut } from "dtos/AccountsDTO";
 import AccountModel from "models/AccountModel";
 import { UserOut } from "dtos/UsersDTO";
 import { Prisma } from "@prisma/client";
+import UserModel from "models/UserModel";
 
 const accountModel = new AccountModel();
+const userModel = new UserModel();
 
 export default class AdminController {
     updateAccountBalance = async (req: Request, res: Response) => {
@@ -23,6 +25,48 @@ export default class AdminController {
             res.status(200).json(updatedBalance);
         } catch (e) {
             
+        }
+    }
+
+    resetAttempt = async (req: Request, res: Response) => {
+        const user_id: string = req.body.user_id;
+
+        try {
+            const updatedUser: UserOut = await userModel.resetAttempt(user_id, {n_attempt: true});
+            
+            if (updatedUser && typeof updatedUser.n_attempt === 'number') {
+                return res.status(200).json(updatedUser);
+            }
+
+            res.status(404).json({
+                error: "USR-06",
+                message: "User not found.",
+            });
+            
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    unblockUser = async (req: Request, res: Response) => {
+        const user_id: string = req.body.user_id;
+
+        try {
+            const updatedUser: UserOut = await userModel.unblockUser(user_id,
+                { blocked: true, n_attempt: true}
+            );
+            
+            if (updatedUser && !updatedUser.blocked) {
+                return res.status(200).json(updatedUser);
+            }
+
+            res.status(404).json({
+                error: "USR-06",
+                message: "User not found.",
+            });
+            
+        } catch (e) {
+            throw e;
         }
     }
 }

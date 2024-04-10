@@ -136,4 +136,57 @@ export default class AccountModel {
         select: { balance: true}
       })
     }
+
+    incrementAttempt = async (id: string, selectFields: Record<string, boolean> = {
+      id: true,
+      user_id: true,
+      transfer_password: true,
+      balance: true,
+      bank: true,
+      agency: true,
+      account_number: true,
+      n_attemp: true,
+      blocked: true,
+      block_date: true,
+      created_at: true,
+      updated_at: true 
+   }) => {
+      return await prisma.account.update({
+        where: {
+          id: id,
+        },
+        data: {
+          n_attempt: {
+            increment: 1,
+          },
+        },
+        select: selectFields
+      });
+    }
+
+    blockAccount = async (id: string, selectFields: Record<string, boolean> = {
+      id: true,
+      user_id: true,
+      transfer_password: true,
+      balance: true,
+      bank: true,
+      agency: true,
+      account_number: true,
+      n_attempt: true,
+      blocked: true,
+      block_date: true,
+      created_at: true,
+      updated_at: true 
+   }) => {
+      return await prisma.account.update({
+        where: {
+          id: id,
+        },
+        data: {
+          blocked: true,
+          block_date: new Date(),
+        },
+        select: selectFields
+      });
+    }
 };

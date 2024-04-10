@@ -65,9 +65,154 @@ export default class UserModel {
     })
   }
 
-  findByCPF = async (cpf: string, selectFields: Record<string, boolean> = { id: true, cpf: true, password: true, full_name: true }) => {
+  findByCPF = async (cpf: string, selectFields: Record<string, boolean> = { 
+    id: true,
+    cpf: true,
+    password: true,
+    full_name: true,
+    n_attempt: true,
+    blocked: true,
+  }) => {
     return await prisma.user.findUnique({
       where: { cpf: cpf },
+      select: selectFields,
+    });
+  }
+
+  incrementAttempt = async (id: string, selectFields: Record<string, boolean> = {
+    id: true,
+    full_name: true,
+    email: true,
+    phone: true,
+    cpf: true,
+    birth_date: true,
+    password: true,
+    n_attempt: true,
+    is_admin: true,
+    blocked: true,
+    block_date: true,
+    created_at: true,
+    updated_at: true,
+    address_id: true
+  }) => {
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        n_attempt: {
+          increment: 1,
+        },
+      },
+      select: selectFields
+    });
+  }
+
+  blockUser = async (id: string, selectFields: Record<string, boolean> = {
+    id: true,
+    full_name: true,
+    email: true,
+    phone: true,
+    cpf: true,
+    birth_date: true,
+    password: true,
+    n_attempt: true,
+    is_admin: true,
+    blocked: true,
+    block_date: true,
+    created_at: true,
+    updated_at: true,
+    address_id: true
+  }) => {
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        blocked: true,
+        block_date: new Date(),
+      },
+      select: selectFields
+    });
+  }
+
+  resetAttempt = async (id: string, selectFields: Record<string, boolean> = {
+    id: true,
+    full_name: true,
+    email: true,
+    phone: true,
+    cpf: true,
+    birth_date: true,
+    password: true,
+    n_attempt: true,
+    is_admin: true,
+    blocked: true,
+    block_date: true,
+    created_at: true,
+    updated_at: true,
+    address_id: true
+  }) => {
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        n_attempt: 0,
+      },
+      select: selectFields,
+    });
+  }
+
+  resetAttemptMany = async (selectFields: Record<string, boolean> = {
+    id: true,
+    full_name: true,
+    email: true,
+    phone: true,
+    cpf: true,
+    birth_date: true,
+    password: true,
+    n_attempt: true,
+    is_admin: true,
+    blocked: true,
+    block_date: true,
+    created_at: true,
+    updated_at: true,
+    address_id: true
+  }) => {
+    return await prisma.user.updateMany({
+      where: {
+        blocked: false,
+      },
+      data: {
+        n_attempt: 0,
+      },
+    });
+  }
+
+  unblockUser = async (id: string, selectFields: Record<string, boolean> = {
+    id: true,
+    full_name: true,
+    email: true,
+    phone: true,
+    cpf: true,
+    birth_date: true,
+    password: true,
+    n_attempt: true,
+    is_admin: true,
+    blocked: true,
+    block_date: true,
+    created_at: true,
+    updated_at: true,
+    address_id: true
+  }) => {
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        blocked: false,
+        n_attempt: 0,
+      },
       select: selectFields,
     });
   }
