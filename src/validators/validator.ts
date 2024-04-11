@@ -158,6 +158,14 @@ export abstract class ValidationRules {
       check('sort')
         .custom(sort => isSortType(sort))
     ];
+
+    static forgotPasswordToken: ValidationChain[] = [
+      check('token')
+        .custom(account_number => isOnlyNumbers(account_number))
+        .withMessage('Invalid token')
+        .isLength({ min: 6, max: 6 })
+        .withMessage('Invalid token')
+    ]
 }
 
 export const validate = (schemas: ValidationChain[])  => {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserIn, UserOut } from "dtos/UsersDTO";
+import { UserIn, UserLoginOut, UserOut } from "dtos/UsersDTO";
 import UserModel from "models/UserModel";
 import { MapTo } from 'utils/mapToUtil'
 import { AddressIn } from "dtos/AddressesDTO";
@@ -7,6 +7,8 @@ import { AccountIn } from "dtos/AccountsDTO";
 import CreateUser from "application/CreateUser";
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcryptjs'
+import { getRandom } from "utils/numberUtil";
+import mailer from "modules/mailer";
 
 const userModel = new UserModel();
 
@@ -78,6 +80,107 @@ export default class UserController {
       });
     }
   };
+
+  sendEmailForgotPassword = async (req: Request, res: Response) => {
+    const cpf: string = req.body.cpf;
+
+    try {
+      const newUser: UserOut | null = await userModel.findByCPF(cpf,
+        { id: true, email: true }
+      ) as UserLoginOut;
+
+      if (!newUser?.id || !newUser?.email) {
+        return res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
+        });
+      }
+
+      const token: string = getRandom(6);
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
+
+      await userModel.updatePasswordReset(newUser.id, token, now);
+
+      const mailOptions = {
+        from: 'rubbankteam@gmail.com',
+        to: newUser.email,
+        subject: 'Password Recovery',
+        template: 'users/forgot_password',
+        context: {
+          token
+        }
+      }
+
+      mailer.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return res.status(500).send({
+            error: "MAIL-01",
+            message: "Failed to send email",
+          });
+        } else {
+          return res.status(200).send();
+        }
+      });
+    } catch (e) {
+      return res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  }
+
+  resetPassword = async (req: Request, res: Response) => {
+    let { cpf, token, password } = req.body;
+
+    try {
+      const user: UserOut | null = await userModel.findByCPF(cpf,
+        {
+          id: true,
+          password_reset_token: true,
+          password_reset_expires: true,
+        }
+      );
+
+      if (!user?.password_reset_token || !user?.password_reset_expires || !user?.id) {
+        return res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
+        });
+      }
+
+      if (token !== user.password_reset_token) {
+        return res.status(403).json({
+          error: "TKN-01",
+          message: "Token invalid"
+        });
+      }
+
+      const now = new Date();
+
+      if (now > user.password_reset_expires) {
+        return res.status(403).json({
+          error: "TKN-02",
+          message: "Token expired, generate a new one"
+        });
+      }
+
+      const salt = await genSalt(10);
+      password = await hash(password, salt);
+
+      const userUpdated: UserOut | null = await userModel.updatePassword(
+        user.id,
+        password
+      ) as UserOut;
+
+      res.status(200).send();
+    } catch (e) {
+      res.status(400).send({
+        error: "USR-10",
+        message: "Failed to reset password, please try again"
+      })
+    }
+  }
 
   updatePassword = async (req: Request, res: Response) => {
     try {

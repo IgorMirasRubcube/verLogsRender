@@ -22,6 +22,9 @@ export interface UserOut {
   birth_date?: Date;
   n_attempt?: number;
   blocked?: boolean;
+  email?: string;
+  password_reset_token?: string;
+  password_reset_expires?: Date;
 }
 
 export interface UserUpdate {   // Alterar senha do App

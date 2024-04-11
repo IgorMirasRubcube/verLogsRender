@@ -24,7 +24,6 @@ app.use(express.json());
 schedule("1 0 * * *", () => {
   const payScheduledTransfers = new PayScheduledTransfers();
   payScheduledTransfers.execute();
-  console.log("Scheduled transfers paid");
 }, {
   timezone: "America/Sao_Paulo"
 });
@@ -32,14 +31,12 @@ schedule("1 0 * * *", () => {
 schedule("0 2 15 * *", () => {
   const resetUserAttempt = new ResetUserAttempt();
   resetUserAttempt.execute();
-  console.log("n_attempt of non-blocked users reseted");
 }, {
   timezone: "America/Sao_Paulo"
 });
 
 schedule("*/5 * * * *", () => {
   axios.get('https://rubcamp-3-backend-igormiras.onrender.com/');
-  console.log('consultou')
 }, {
   timezone: "America/Sao_Paulo"
 });

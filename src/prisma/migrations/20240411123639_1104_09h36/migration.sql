@@ -14,6 +14,8 @@ CREATE TABLE "User" (
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "blocked" BOOLEAN NOT NULL DEFAULT false,
     "block_date" TIMESTAMP(3),
+    "password_reset_token" TEXT,
+    "password_reset_expires" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
     "address_id" INTEGER,

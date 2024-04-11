@@ -7,7 +7,7 @@ const routes = Router();
 const userController = new UserController();
 
 // @route   POST users/
-// @desc    Cadastrar um usuario
+// @desc    Register an user
 // @acess   Public
 routes.post('/',
     validate(ValidationRules.userWithoutPassword),
@@ -16,6 +16,26 @@ routes.post('/',
     validate(ValidationRules.transferPassword),
     userController.create
 );
+
+// @route   POST users/forgot_password
+// @desc    Send a forgot password email
+// @acess   Public
+routes.post('/forgot_password',
+    validate(ValidationRules.cpf),
+    userController.sendEmailForgotPassword
+);
+
+// @route   POST users/reset_password
+// @desc    Reset user's password with the token sent to user's email
+// @acess   Public
+routes.post('/reset_password',
+    validate(ValidationRules.cpf),
+    validate(ValidationRules.forgotPasswordToken),
+    validate(ValidationRules.password),
+    userController.resetPassword
+);
+
+
 
 // @route   PUT users/password
 // @desc    Update logged user's password
