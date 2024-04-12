@@ -42,7 +42,8 @@ routes.post('/reset_password',
 // @acess   Private
 routes.put('/password',
     authentication,
-    validate(ValidationRules.password),
+    validate(ValidationRules.oldPassword),
+    validate(ValidationRules.newPassword),
     userController.updatePassword
 );
 

@@ -29,6 +29,7 @@ export interface UserOut {
   password_reset_token?: string;
   password_reset_expires?: Date;
   role?: UserRole;
+  password?: string;
 }
 
 export interface UserUpdate {   // Alterar senha do App

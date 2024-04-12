@@ -6,7 +6,7 @@ import { AddressIn } from "dtos/AddressesDTO";
 import { AccountIn } from "dtos/AccountsDTO";
 import CreateUser from "application/CreateUser";
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
-import { genSalt, hash } from 'bcryptjs'
+import { genSalt, hash, compare } from 'bcryptjs'
 import { getRandom } from "utils/numberUtil";
 import mailer from "modules/mailer";
 
@@ -185,14 +185,35 @@ export default class UserController {
   updatePassword = async (req: Request, res: Response) => {
     try {
       const id: string = req.user.id;
-      let password: string = req.body.password;
+      let newPassword: string = req.body.new_password;
+      const oldPassword: string = req.body.old_password;
+
+      const user: UserOut | null = await userModel.get(id, { password: true });
+
+      if (!user?.password) {
+        return res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
+      });
+      }
+
+      const isMatch = await compare(oldPassword, user.password);
+
+      console.log('passou por aqui moso')
+
+      if (!isMatch) {
+        return res.status(403).json({
+          error: "USR-11",
+          message: "Wrong password",
+        })
+      }
 
       const salt = await genSalt(10);
-      password = await hash(password, salt);
+      newPassword = await hash(newPassword, salt);
 
       const userUpdated: UserOut | null = await userModel.updatePassword(
         id,
-        password
+        newPassword
       ) as UserOut;
 
       if (userUpdated) {

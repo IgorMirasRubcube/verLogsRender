@@ -25,7 +25,7 @@ routes.get('/:agency/:account_number',
 routes.get('/myaccounts', accountController.getAllLoggedUser);
 
 // @route   GET accounts/:account_id
-// @desc    Get infos of an account by account_id
+// @desc    Get infos of an account and user by account_id
 // @acess   Private
 routes.get('/:account_id', validate(ValidationRules.accountId) ,accountController.getById);
 

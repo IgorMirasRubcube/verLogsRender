@@ -53,7 +53,27 @@ export abstract class ValidationRules {
         .withMessage('Password cannot have 3 repeated letters or numbers')
         .custom(password => !containsSequence(password))
         .withMessage('Password cannot have sequencial letters or numbers')
-    ]
+    ];
+
+    static oldPassword: ValidationChain[] = [
+      check('old_password')
+        .matches(passwordRegex)
+        .withMessage('Password must have at least 8 characters, incluiding letters, numbers and !@#$%^&*')
+        .matches(noRepeatRegex)
+        .withMessage('Password cannot have 3 repeated letters or numbers')
+        .custom(password => !containsSequence(password))
+        .withMessage('Password cannot have sequencial letters or numbers')
+    ];
+
+    static newPassword: ValidationChain[] = [
+      check('new_password')
+        .matches(passwordRegex)
+        .withMessage('Password must have at least 8 characters, incluiding letters, numbers and !@#$%^&*')
+        .matches(noRepeatRegex)
+        .withMessage('Password cannot have 3 repeated letters or numbers')
+        .custom(password => !containsSequence(password))
+        .withMessage('Password cannot have sequencial letters or numbers')
+    ];
 
     static transferPassword: ValidationChain[] = [
       check('transfer_password')
