@@ -36,7 +36,7 @@ export abstract class MapTo {
     }
     
     static AddressIn = (body: any): AddressIn => {
-        const {
+        let {
             cep,
             street,
             number,
@@ -45,6 +45,8 @@ export abstract class MapTo {
             city,
             state
         } = body;
+
+        state = state.toUpperCase();
 
         return {
             cep,

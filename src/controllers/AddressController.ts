@@ -3,6 +3,7 @@ import { AddressIn, AddressOut } from "dtos/AddressesDTO";
 import AddressModel from "models/AddressModel";
 import UserModel from "models/UserModel";
 import { UserOut } from "dtos/UsersDTO";
+import { MapTo } from 'utils/mapToUtil';
 
 const addressModel = new AddressModel();
 const userModel = new UserModel();
@@ -60,7 +61,7 @@ export default class AddressController {
   update = async (req: Request, res: Response) => {
     try {
       const user_id: string = req.user.id;
-      const updateAddress: AddressIn = req.body;
+      const updateAddress: AddressIn = MapTo.AddressIn(req.body);
 
       const user: UserOut | null = await userModel.get(user_id, {address_id: true}) as UserOut;
 
