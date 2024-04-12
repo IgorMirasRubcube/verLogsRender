@@ -20,23 +20,23 @@ export default class UserController {
     const createUser = new CreateUser();
     
     try {
-      let user_id: string = await createUser.execute(user, address, account);
+      let newUser: UserOut = await createUser.execute(user, address, account);
       const payload: JwtPayload = {
         user: {
-            id: user_id
+            id: newUser.id,
+            role: newUser.role,
         }
       };
 
       jwt.sign(
         payload,
-        process.env.JWT_SECRET as Secret,
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) throw err;
-          res.status(201).json({ token })
-        }
-    );
-
+          process.env.JWT_SECRET as Secret,
+          { expiresIn: "1h" },
+          (err, token) => {
+            if (err) throw err;
+            res.status(201).json({ token })
+          }
+      );
     } catch (e) {
       console.log("Failed to create user", e);
       res.status(500).send({
@@ -87,7 +87,7 @@ export default class UserController {
     try {
       const newUser: UserOut | null = await userModel.findByCPF(cpf,
         { id: true, email: true }
-      ) as UserLoginOut;
+      ) as UserOut;
 
       if (!newUser?.id || !newUser?.email) {
         return res.status(404).json({

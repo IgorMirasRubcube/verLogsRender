@@ -12,7 +12,7 @@ export default class LoginController {
     
     try {
       const newUser: UserLoginOut | null = await userModel.findByCPF(user.cpf,
-        { id: true, password: true, blocked: true }
+        { id: true, password: true, blocked: true, role: true }
       ) as UserLoginOut | null;
       
       if (!newUser) {
@@ -62,10 +62,11 @@ export default class LoginController {
 
       const payload: JwtPayload = {
         user: {
-          id: newUser.id
+          id: newUser.id,
+          role: newUser.role,
         }
       };
-    
+      
       jwt.sign(
         payload,
           process.env.JWT_SECRET as Secret,
@@ -75,7 +76,6 @@ export default class LoginController {
             res.status(201).json({ token })
           }
       );
-    
     } catch (e) {
       console.log("Server Error", e);
       res.status(500).send({

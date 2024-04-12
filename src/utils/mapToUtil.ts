@@ -14,20 +14,25 @@ export abstract class MapTo {
             phone,
             cpf,
             birth_date,
-            password
+            password,
+            role
         } = body;
 
         birth_date = new Date(birth_date);
         email = email.toLowerCase();
-
-        return {
+        
+        let userIn: UserIn = {
             full_name,
             email,
             phone,
             cpf,
             birth_date,
-            password
-        };
+            password,
+        }
+
+        if (role) userIn.role = role;
+
+        return userIn;
     }
     
     static AddressIn = (body: any): AddressIn => {

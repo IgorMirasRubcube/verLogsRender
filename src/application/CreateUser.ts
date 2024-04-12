@@ -12,7 +12,7 @@ export default class CreateUser {
 
     }
 
-    async execute(user: UserIn, address: AddressIn, account: AccountIn): Promise<string> {
+    async execute(user: UserIn, address: AddressIn, account: AccountIn): Promise<UserOut> {
         const userModel = new UserModel();
         const addressModel = new AddressModel();
         const accountModel = new AccountModel();
@@ -29,12 +29,16 @@ export default class CreateUser {
             const newAddress: AddressOut | null = await addressModel.create(address) as AddressOut;
             
             user.address_id = newAddress.id;
-            const user_id: UserOut = await userModel.create(user);
+            const newUser: UserOut = await userModel.create(user) as UserOut;
 
-            account.user_id = user_id.id;
+            if (!newUser?.id) {
+                throw new Error('Failed to create user')
+            }
+
+            account.user_id = newUser.id;
             await accountModel.create(account);
 
-            return user_id.id;
+            return newUser;
         } catch (e) {
             throw e;
         }

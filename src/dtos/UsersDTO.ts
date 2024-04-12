@@ -1,3 +1,5 @@
+import { UserRole } from "@prisma/client"
+
 export interface UserIn {
   full_name: string;
   email: string;
@@ -12,6 +14,7 @@ export interface UserIn {
   created_at?: Date;
   updated_at?: Date;
   address_id?: number;
+  role?: UserRole;
 }
 
 export interface UserOut {
@@ -25,6 +28,7 @@ export interface UserOut {
   email?: string;
   password_reset_token?: string;
   password_reset_expires?: Date;
+  role?: UserRole;
 }
 
 export interface UserUpdate {   // Alterar senha do App
@@ -40,5 +44,6 @@ export interface UserLoginIn {
 export interface UserLoginOut {
   id: string;
   password: string;
-  blocked: true;
+  blocked: boolean;
+  role: UserRole;
 }

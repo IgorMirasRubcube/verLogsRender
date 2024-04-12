@@ -9,7 +9,8 @@ export default class UserModel {
     return await prisma.user.create({
       data: user,
       select: {
-        id: true
+        id: true,
+        role: true
       },
     })
   }
@@ -89,7 +90,8 @@ export default class UserModel {
     blocked: true,
     email: true,
     password_reset_token: true,
-    password_reset_expires: true
+    password_reset_expires: true,
+    role: true,
   }) => {
     return await prisma.user.findUnique({
       where: { cpf: cpf },

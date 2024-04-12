@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "TransferStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED', 'FAILED');
 
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('DEFAULT', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -16,6 +19,7 @@ CREATE TABLE "User" (
     "block_date" TIMESTAMP(3),
     "password_reset_token" TEXT,
     "password_reset_expires" TIMESTAMP(3),
+    "role" "UserRole" NOT NULL DEFAULT 'DEFAULT',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
     "address_id" INTEGER,

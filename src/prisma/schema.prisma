@@ -27,6 +27,7 @@ model User {
   block_date              DateTime?
   password_reset_token    String?
   password_reset_expires  DateTime?
+  role                    UserRole @default(DEFAULT)
   created_at              DateTime @default(now())
   updated_at              DateTime?
   address                 Address?  @relation(fields: [address_id], references: [id])
@@ -103,4 +104,9 @@ enum TransferStatus {
   COMPLETED
   CANCELED
   FAILED
+}
+
+enum UserRole {
+  DEFAULT
+  ADMIN
 }

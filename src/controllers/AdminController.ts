@@ -66,7 +66,11 @@ export default class AdminController {
             });
             
         } catch (e) {
-            throw e;
+            console.log("Failed to unblock user ", e);
+            return res.status(500).send({
+                error: "ADM-01",
+                message: "Failed to unblock user",
+            })
         }
     }
 }

@@ -8,7 +8,7 @@ import loginRoutes from "routes/LoginRoute";
 import transfersRoutes from "routes/TransferRoute"
 import adminRoutes from "routes/AdminRoute"
 import notificationsRoutes from "routes/NotificationRoute";
-import { authentication } from "middlewares/auth";
+import { authentication, authenticationAdmin } from "middlewares/auth";
 import { DateTime } from "luxon";
 import { schedule } from "node-cron";
 import PayScheduledTransfers from "application/PayScheduledTransfers"
@@ -50,6 +50,6 @@ app.use("/accounts", authentication, accountsRoutes);
 app.use("/validations", validationsRoutes);
 app.use("/login", loginRoutes);
 app.use("/transfers", authentication, transfersRoutes);
-app.use("/admin", adminRoutes); // add adminAuth later
+app.use("/admin", authenticationAdmin, adminRoutes); // add adminAuth later
 app.use("/notifications", authentication, notificationsRoutes);
 app.listen(process.env.PORT || 3344);
