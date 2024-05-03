@@ -18,7 +18,7 @@ RUN npm i -g prisma
 # run migration
 RUN npx prisma generate
 
-RUN npx prisma migrate deploy
+RUN npx prisma migrate resolve --applied "20240503011905_2maio"
 
 EXPOSE 3344
 EXPOSE 5556
