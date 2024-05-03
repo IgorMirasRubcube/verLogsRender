@@ -27,7 +27,7 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3344:3344
-      - 5555:5555
+      - 5556:5556
     networks:
       - rubcamp
     links:

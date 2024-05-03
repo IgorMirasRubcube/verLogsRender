@@ -191,11 +191,10 @@ export abstract class ValidationRules {
 export const validate = (schemas: ValidationChain[])  => {
     return async (req: Request, res: Response, next: NextFunction) => {
       await Promise.all(schemas.map((schema) => schema.run(req)));
-
       const errors: Result = validationResult(req);
       if (errors.isEmpty()) {
         return next();
       }
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({ error: "VALIDATION", errors: errors.array() });
     };
 }

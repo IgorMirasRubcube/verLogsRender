@@ -18,7 +18,9 @@ RUN npm i -g prisma
 # run migration
 RUN npx prisma generate
 
+RUN npx prisma migrate
+
 EXPOSE 3344
-EXPOSE 5555
+EXPOSE 5556
 
 CMD [ "yarn", "dev" ]
