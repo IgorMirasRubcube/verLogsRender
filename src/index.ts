@@ -4,7 +4,7 @@ import usersRoutes from "routes/UserRoute";
 import addressesRoutes from "routes/AddressRoute";
 import accountsRoutes from "routes/AccountRoute";
 import validationsRoutes from "routes/ValidationRoute";
-import loginRoutes from "routes/LoginRoute";
+import authRoutes from "routes/AuthRoute";
 import transfersRoutes from "routes/TransferRoute"
 import adminRoutes from "routes/AdminRoute"
 import notificationsRoutes from "routes/NotificationRoute";
@@ -52,7 +52,7 @@ app.use("/users", usersRoutes);
 app.use("/addresses", authentication, addressesRoutes);
 app.use("/accounts", authentication, accountsRoutes);
 app.use("/validations", validationsRoutes);
-app.use("/login", loginRoutes);
+app.use("/auth", authRoutes);
 app.use("/transfers", authentication, transfersRoutes);
 app.use("/admin", authenticationAdmin, adminRoutes); // add adminAuth later
 app.use("/notifications", authentication, notificationsRoutes);

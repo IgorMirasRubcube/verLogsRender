@@ -6,7 +6,7 @@ import { compare } from 'bcryptjs';
 
 const userModel = new UserModel();
 
-export default class LoginController {
+export default class AuthController {
   verify = async (req: Request, res: Response) => {
     let user: UserLoginIn = req.body;
     
@@ -84,5 +84,9 @@ export default class LoginController {
       });
     }
   };
+
+  logout = async (req: Request, res: Response) => {
+    res.header('x-auth-token', '');
+  }
 
 }

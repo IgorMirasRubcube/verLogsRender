@@ -119,7 +119,8 @@ export default class AccountModel {
       return await prisma.account.findFirst({
         where: {
           agency: agency,
-          account_number: account_number
+          account_number: account_number,
+          blocked: false,
         },
         select: selectFields,
       });

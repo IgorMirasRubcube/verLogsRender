@@ -31,7 +31,7 @@ export default class AccountController {
     try {
       const account_id: string = req.params.account_id;
       const account: AccountOut | null = await accountModel.get(account_id,
-        { user_id: true, account_number: true, agency: true, bank: true }
+        { user_id: true, account_number: true, agency: true, bank: true, blocked: true }
       );
 
       if (account?.user_id && req.user.id !== account.user_id) {
@@ -62,6 +62,7 @@ export default class AccountController {
         account_number: account.account_number,
         agency: account.agency,
         bank: account.bank,
+        account_blocked: account.blocked,
         full_name: user.full_name,
         cpf: user.cpf
       });
@@ -145,12 +146,21 @@ export default class AccountController {
       const account_id: string = req.params.account_id;
       let transfer_password: string = req.body.transfer_password;
       
-      const account: AccountOut | null = await accountModel.get(account_id, {user_id: true});
+      const account: AccountOut | null = await accountModel.get(account_id, {
+        user_id: true, blocked: true
+      });
 
       if (!account?.user_id) {
         return res.status(500).send({
           error: "SRV-01",
           message: "Server Error",
+        });
+      }
+
+      if (account.blocked) {
+        return res.status(403).json({
+          error: "ACC-09",
+          message: "ACCOUNT BLOCKED"
         });
       }
 
@@ -271,7 +281,7 @@ export default class AccountController {
       }
 
       const accounts: AccountOut[] | null = await accountModel.getAllByUserId(newUser.id, {
-        id: true, bank: true, agency: true, account_number: true
+        id: true, bank: true, agency: true, account_number: true, blocked: true
       }) as AccountOut[] | null;
 
       res.status(200).json({
@@ -292,7 +302,7 @@ export default class AccountController {
       const user_id: string = req.user.id;
 
       const accounts: AccountOut[] | null = await accountModel.getAllByUserId(user_id, {
-        id: true, bank: true, agency: true, account_number: true
+        id: true, bank: true, agency: true, account_number: true, blocked: true
       }) as AccountOut[] | null;
 
       res.status(200).json({
