@@ -18,7 +18,9 @@ RUN npm i -g prisma
 # run migration
 RUN npx prisma generate
 
-RUN npx prisma migrate
+RUN npx prisma migrate resolve --rolled-back "20240411123639_1104_09h36"
+
+RUN npx prisma migrate deploy
 
 EXPOSE 3344
 EXPOSE 5556
