@@ -8,7 +8,11 @@ const validationController = new ValidationController();
 // @route   POST validations/user
 // @desc    Verify user data
 // @acess   Public
-routes.post('/user', validate(ValidationRules.userWithoutPassword), validationController.verifyUser);
+routes.post('/user',
+                validate(ValidationRules.email),
+                validate(ValidationRules.cpf),
+                validationController.verifyUser
+            );
 
 // @route   POST validations/address
 // @desc    Verify address data

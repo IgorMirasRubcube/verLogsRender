@@ -34,6 +34,10 @@ export abstract class ValidationRules {
         check('birth_date').isISO8601().custom(birth_date_string => isValidBirthDate(birth_date_string)),
     ];
 
+    static email: ValidationChain[] = [
+      check('email', 'Please include a valid email').isEmail(),
+    ]
+
     static address: ValidationChain[] = [
         check('cep', 'CEP is required')
           .custom(async cep => isValidCEP(cep))
