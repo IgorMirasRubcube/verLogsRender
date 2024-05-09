@@ -51,12 +51,6 @@ schedule("0 2 15 * *", () => {
   //timezone: "America/Sao_Paulo"
 //});
 
-export const teste = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req);
-  next();
-}
-
-
 app.get("/", (req, res) => {
   return res.send("Hello World");
 });
@@ -64,7 +58,7 @@ app.use("/users", usersRoutes);
 app.use("/addresses", authentication, addressesRoutes);
 app.use("/accounts", authentication, accountsRoutes);
 app.use("/validations", validationsRoutes);
-app.use("/auth", teste, authRoutes);
+app.use("/auth", authRoutes);
 app.use("/transfers", authentication, transfersRoutes);
 app.use("/admin", authenticationAdmin, adminRoutes); // add adminAuth later
 app.use("/notifications", authentication, notificationsRoutes);
