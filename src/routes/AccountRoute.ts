@@ -24,6 +24,12 @@ routes.get('/:agency/:account_number',
 // @acess   Private
 routes.get('/myaccounts', accountController.getAllLoggedUser);
 
+
+// @route   GET accounts/main
+// @desc    Get balance of main account
+// @acess   Private
+routes.get('/main', accountController.main);
+
 // @route   GET accounts/:account_id
 // @desc    Get infos of an account and user by account_id
 // @acess   Private
@@ -58,10 +64,5 @@ routes.post('/balance',
     validate(ValidationRules.accountId),
     accountController.verifyEnoughBalance
 );
-
-// @route   GET accounts/main
-// @desc    Get balance of main account
-// @acess   Private
-routes.get('/main',accountController.main);
 
 export default routes;
