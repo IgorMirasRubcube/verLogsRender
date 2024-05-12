@@ -233,6 +233,28 @@ export default class UserController {
     }
   };
 
+  getNameAndCpf = async (req: Request, res: Response) => {
+    try {
+      const newUser: UserOut | null = await userModel.get(req.user.id, {
+        full_name: true, cpf: true
+      }) as UserOut | null;
+
+      if (newUser) {
+        res.status(200).json(newUser);
+      } else {
+        res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
+        });
+      }
+    } catch (e) {
+      return res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  }
+
   delete = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;

@@ -35,7 +35,10 @@ routes.post('/reset_password',
     userController.resetPassword
 );
 
-
+// @route   GET users/nameandcpf
+// @desc    Get name and cpf of logged user
+// @acess   Private
+routes.post('/nameandcpf', userController.getNameAndCpf);
 
 // @route   PUT users/password
 // @desc    Update logged user's password

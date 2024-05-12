@@ -26,7 +26,7 @@ routes.get('/myaccounts', accountController.getAllLoggedUser);
 
 
 // @route   GET accounts/main
-// @desc    Get balance of main account
+// @desc    Get balance and id of main account
 // @acess   Private
 routes.get('/main', accountController.main);
 
