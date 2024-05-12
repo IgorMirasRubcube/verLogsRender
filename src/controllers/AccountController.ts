@@ -109,7 +109,8 @@ export default class AccountController {
 
   main = async (req: Request, res: Response) => {
     try {
-      const newAccount: AccountOut | null = await accountModel.me(req.user.id, { balance: true }) as AccountOut | null;
+      const newAccount: AccountOut | null = await accountModel.me(req.user.id,
+         { balance: true, id: true }) as AccountOut | null;
 
       if (!newAccount?.balance) {
         return res.status(404).json({
