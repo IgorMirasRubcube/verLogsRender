@@ -249,7 +249,7 @@ export default class UserController {
         });
       }
     } catch (e) {
-      console.log('Eeeo: ', e);
+      console.log('Erro: ', e);
       return res.status(500).send({
         error: "SRV-01",
         message: "Server Error",
