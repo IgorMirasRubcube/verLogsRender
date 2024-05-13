@@ -25,10 +25,10 @@ routes.get('/:agency/:account_number',
 routes.get('/myaccounts', accountController.getAllLoggedUser);
 
 
-// @route   GET accounts/main
-// @desc    Get balance and id of main account
+// @route   GET accounts/balance/:account_id
+// @desc    Get balance of an account by id
 // @acess   Private
-routes.get('/main', accountController.main);
+routes.get('/balance/:account_id', validate(ValidationRules.accountId), accountController.main);
 
 // @route   GET accounts/:account_id
 // @desc    Get infos of an account and user by account_id
