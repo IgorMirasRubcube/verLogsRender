@@ -235,7 +235,6 @@ export default class UserController {
 
   getNameAndCpf = async (req: Request, res: Response) => {
     try {
-      console.log('UserId:', req.user.id);
       const newUser: UserOut | null = await userModel.get(req.user.id, {
         full_name: true, cpf: true
       }) as UserOut | null;

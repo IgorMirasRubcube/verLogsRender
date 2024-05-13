@@ -31,7 +31,7 @@ export default class AccountController {
     try {
       const account_id: string = req.params.account_id;
       const account: AccountOut | null = await accountModel.get(account_id,
-        { user_id: true, account_number: true, agency: true, bank: true, blocked: true }
+        { user_id: true, account_number: true, agency: true, bank: true, blocked: true, type: true }
       );
 
       if (account?.user_id && req.user.id !== account.user_id) {
@@ -62,6 +62,7 @@ export default class AccountController {
         account_number: account.account_number,
         agency: account.agency,
         bank: account.bank,
+        type: account.type,
         account_blocked: account.blocked,
         full_name: user.full_name,
         cpf: user.cpf
