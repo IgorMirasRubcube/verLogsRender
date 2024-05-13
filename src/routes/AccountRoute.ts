@@ -10,6 +10,11 @@ routes.get('/', accountController.getAll);
 routes.put('/:id', accountController.update);
 routes.delete('/:id', accountController.delete);
 
+// @route   GET accounts/balance/:account_id
+// @desc    Get balance of an account by id
+// @acess   Private
+routes.get('/balance/:account_id', validate(ValidationRules.accountId), accountController.getBalance);
+
 // @route   GET accounts/:agency/:account_number
 // @desc    Get an account by agency and account_number
 // @acess   Private
@@ -25,10 +30,6 @@ routes.get('/:agency/:account_number',
 routes.get('/myaccounts', accountController.getAllLoggedUser);
 
 
-// @route   GET accounts/balance/:account_id
-// @desc    Get balance of an account by id
-// @acess   Private
-routes.get('/balance/:account_id', validate(ValidationRules.accountId), accountController.main);
 
 // @route   GET accounts/:account_id
 // @desc    Get infos of an account and user by account_id
