@@ -59,7 +59,7 @@ routes.post('/cpf',
 // @route   POST accounts/balance
 // @desc    Verify if account balance is equal or greater transfer_value
 // @acess   Private
-routes.post('/balance',
+routes.post('/verifybalance',
     validate(ValidationRules.transferValue),
     validate(ValidationRules.accountId),
     accountController.verifyEnoughBalance
