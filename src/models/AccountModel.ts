@@ -89,6 +89,7 @@ export default class AccountModel {
        bank: true,
        agency: true,
        account_number: true,
+       type: true,
        n_attemp: true,
        blocked: true,
        block_date: true,

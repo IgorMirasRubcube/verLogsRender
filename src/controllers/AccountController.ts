@@ -304,7 +304,7 @@ export default class AccountController {
       const user_id: string = req.user.id;
 
       const accounts: AccountOut[] | null = await accountModel.getAllByUserId(user_id, {
-        id: true, bank: true, agency: true, account_number: true, blocked: true
+        id: true, bank: true, agency: true, account_number: true, blocked: true, type: true
       }) as AccountOut[] | null;
 
       res.status(200).json({
