@@ -5,7 +5,7 @@ import { getRandom } from "utils/numberUtil";
 import UserModel from "models/UserModel";
 import { UserOut } from "dtos/UsersDTO";
 import { Prisma } from "@prisma/client";
-import { genSalt, hash } from 'bcryptjs'
+import { genSalt, hash, compare } from 'bcryptjs'
 import { hasBirthDate } from "utils/validationUtil"
 
 const accountModel = new AccountModel();
@@ -147,12 +147,13 @@ export default class AccountController {
     try {
       const account_id: string = req.params.account_id;
       let transfer_password: string = req.body.transfer_password;
-      
+      let old_password: string = req.body.old_password;
+
       const account: AccountOut | null = await accountModel.get(account_id, {
-        user_id: true, blocked: true
+        user_id: true, blocked: true, transfer_password: true
       });
 
-      if (!account?.user_id) {
+      if (!account?.user_id || !account?.transfer_password) {
         return res.status(500).send({
           error: "SRV-01",
           message: "Server Error",
@@ -171,6 +172,15 @@ export default class AccountController {
           error: "USR-08",
           message: "Not authorized"
         });
+      }
+
+      const isMatch = await compare(old_password, account.transfer_password);
+
+      if (!isMatch) {
+        return res.status(403).json({
+          error: "ACC-10",
+          message: "Wrong password",
+        })
       }
 
       const user: UserOut | null = await userModel.get(req.user.id, {birth_date: true}) as UserOut;

@@ -199,8 +199,6 @@ export default class UserController {
 
       const isMatch = await compare(oldPassword, user.password);
 
-      console.log('passou por aqui moso')
-
       if (!isMatch) {
         return res.status(403).json({
           error: "USR-11",
