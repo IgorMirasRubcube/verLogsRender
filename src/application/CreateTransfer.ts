@@ -70,7 +70,14 @@ export default class CreateTransfer {
                 throw new Error('ACCOUNT BLOCKED');
             }
 
-            transfer.is_scheduled ? transfer.status = "SCHEDULED" : transfer.status = "COMPLETED";
+            if (transfer.is_scheduled) {
+                if (!transfer.schedule_date) {
+                    throw new Error('Scheduled transfers must have schedule_date')
+                }
+                transfer.status = "SCHEDULED";
+            } else {
+                transfer.status = "COMPLETED";
+            }
 
             const newTransfer: TransferOut | null = await transferModel.create(transfer, {id: true, value: true});
 

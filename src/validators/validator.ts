@@ -128,7 +128,7 @@ export abstract class ValidationRules {
       check('type')
         .optional()
         .isString(),                            
-      check('isScheduled')
+      check('is_scheduled')
         .optional()
         .isBoolean(),
       check('schedule_date')
