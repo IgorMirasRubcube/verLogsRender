@@ -180,12 +180,14 @@ export default class TransferController {
   };
 
   getExtract = async (req: Request, res: Response) => {
+    let { skip, take } = req.query;
     const extract: ExtractIn = MapTo.ExtractIn(req.query);
     const account_id: string = req.params.account_id;
     let periodStartDate: Date;
     let periodEndDate: Date;
     let transfers: TransferOut[] | null;
 
+    console.log('skip: ', skip, 'take: ', take);
     if (extract.periodStartDate && extract.periodEndDate) {
       periodStartDate = extract.periodStartDate;
       periodEndDate = extract.periodEndDate;
@@ -213,6 +215,8 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
+            skip,
+            take,
             { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
@@ -225,6 +229,8 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
+            skip,
+            take,
             { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
@@ -237,6 +243,8 @@ export default class TransferController {
             periodStartDate,
             periodEndDate,
             extract.sort,
+            skip,
+            take,
             { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   
@@ -248,6 +256,8 @@ export default class TransferController {
             account_id,
             extract.sort,
             periodEndDate,
+            skip,
+            take,
             { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
           ) as TransferOut[];
   

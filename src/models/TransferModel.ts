@@ -70,6 +70,8 @@ export default class TransferModel {
     periodStartDate: Date,
     periodEndDate: Date,
     sortType: string,
+    skip: any,
+    take: any,
     selectFields: Record<string, boolean> = {
       id: true,
       from_account_id: true,
@@ -105,7 +107,9 @@ export default class TransferModel {
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',
       },
-      select: selectFields
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
     })
   }
 
@@ -113,6 +117,8 @@ export default class TransferModel {
     periodStartDate: Date,
     periodEndDate: Date,
     sortType: string,
+    skip: any,
+    take: any,
     selectFields: Record<string, boolean> = {
       id: true,
       from_account_id: true,
@@ -141,7 +147,9 @@ export default class TransferModel {
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',
       },
-      select: selectFields
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
     })
   }
 
@@ -149,6 +157,8 @@ export default class TransferModel {
     periodStartDate: Date,
     periodEndDate: Date,
     sortType: string,
+    skip: any,
+    take: any,
     selectFields: Record<string, boolean> = {
       id: true,
       from_account_id: true,
@@ -177,13 +187,17 @@ export default class TransferModel {
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',
       },
-      select: selectFields
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
     })
   }
 
   getFuturesByAccountId = async (account_id: string,
     sortType: string,
     periodEndDate: Date,
+    skip: any,
+    take: any,
     selectFields: Record<string, boolean> = {
       id: true,
       from_account_id: true,
@@ -221,7 +235,9 @@ export default class TransferModel {
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',
       },
-      select: selectFields
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
     })
   }
 
