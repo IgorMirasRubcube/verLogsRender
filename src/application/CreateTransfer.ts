@@ -71,8 +71,8 @@ export default class CreateTransfer {
             }
 
             if (transfer.is_scheduled) {
-                if (transfer.schedule_date === undefined) {
-                    throw new Error('Scheduled transfers must have schedule_date')
+                if (typeof transfer.schedule_date === 'undefined') {
+                    throw new Error('Scheduled transfers must have schedule_date');
                 }
                 transfer.status = "SCHEDULED";
             } else {
