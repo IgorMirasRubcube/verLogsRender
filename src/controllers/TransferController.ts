@@ -217,7 +217,9 @@ export default class TransferController {
             extract.sort,
             skip,
             take,
-            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
+            { id: true, value: true, type: true, status: true, 
+              created_at: true, schedule_date: true, from_account_id: true
+            },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
@@ -231,7 +233,9 @@ export default class TransferController {
             extract.sort,
             skip,
             take,
-            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
+            { id: true, value: true, type: true, status: true, 
+              created_at: true, schedule_date: true, from_account_id: true
+            },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
@@ -245,7 +249,9 @@ export default class TransferController {
             extract.sort,
             skip,
             take,
-            { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },
+            { id: true, value: true, type: true, status: true, 
+              created_at: true, schedule_date: true, from_account_id: true
+            },
           ) as TransferOut[];
   
           res.status(200).json(transfers);
