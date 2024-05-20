@@ -189,8 +189,8 @@ export default class TransferController {
 
     console.log()
     if (extract.periodStartDate && extract.periodEndDate) {
-      periodStartDate = extract.periodStartDate;
-      periodEndDate = extract.periodEndDate;
+      periodStartDate = new Date(extract.periodStartDate);
+      periodEndDate = new Date(extract.periodEndDate);
     } else {
       if (extract.period){
         periodStartDate = CalculateDays.subtract(new Date(), extract.period);
