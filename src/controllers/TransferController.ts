@@ -193,13 +193,8 @@ export default class TransferController {
       periodEndDate = extract.periodEndDate;
     } else {
       if (extract.period){
-        if (extract.type === 'future') {
-          periodStartDate = new Date();
-          periodEndDate = CalculateDays.add(new Date(), extract.period);
-        } else {
-          periodStartDate = CalculateDays.subtract(new Date(), extract.period);
-          periodEndDate = new Date();
-        }
+        periodStartDate = CalculateDays.subtract(new Date(), extract.period);
+        periodEndDate = new Date();
       } else {
         return res.status(400).send({
           message: "Bad Request"
@@ -261,7 +256,6 @@ export default class TransferController {
           transfers = await transferModel.getFuturesByAccountId(
             account_id,
             extract.sort,
-            periodEndDate,
             skip,
             take,
             { id: true, value: true, type: true, status: true, created_at: true, schedule_date: true },

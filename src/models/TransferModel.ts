@@ -195,7 +195,6 @@ export default class TransferModel {
 
   getFuturesByAccountId = async (account_id: string,
     sortType: string,
-    periodEndDate: Date,
     skip: any,
     take: any,
     selectFields: Record<string, boolean> = {
@@ -224,7 +223,6 @@ export default class TransferModel {
           {
             schedule_date: {
               gte: new Date(),
-              lte: periodEndDate,
             },
           },
           {
@@ -233,7 +231,7 @@ export default class TransferModel {
         ],
       },
       orderBy: {
-        created_at: sortType === 'older' ? 'asc' : 'desc',
+        schedule_date: sortType === 'older' ? 'asc' : 'desc',
       },
       select: selectFields,
       skip: Number(skip),
