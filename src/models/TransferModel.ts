@@ -96,13 +96,10 @@ export default class TransferModel {
             from_account_id: account_id
           },
         ],
-        AND: {
-          created_at: {
-            gte: periodStartDate,
-            lte: periodEndDate
-          },
-          status: "COMPLETED" || "FAILED" || "SCHEDULED",
-        },
+        AND: [
+                { created_at: { gte: periodStartDate, lte: periodEndDate } },
+                { status: { in: ["COMPLETED", "FAILED", "SCHEDULED"] } }
+        ],
       },
       orderBy: {
         created_at: sortType === 'older' ? 'asc' : 'desc',

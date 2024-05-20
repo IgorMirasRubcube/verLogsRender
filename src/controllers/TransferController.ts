@@ -187,7 +187,6 @@ export default class TransferController {
     let periodEndDate: Date;
     let transfers: TransferOut[] | null;
 
-    console.log()
     if (extract.periodStartDate && extract.periodEndDate) {
       periodStartDate = new Date(extract.periodStartDate);
       periodEndDate = new Date(extract.periodEndDate);
