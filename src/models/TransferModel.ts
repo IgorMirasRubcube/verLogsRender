@@ -231,7 +231,7 @@ export default class TransferModel {
         ],
       },
       orderBy: {
-        schedule_date: sortType === 'older' ? 'asc' : 'desc',
+        schedule_date: sortType === 'older' ? 'desc' : 'asc',
       },
       select: selectFields,
       skip: Number(skip),
