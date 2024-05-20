@@ -187,18 +187,13 @@ export default class TransferController {
     let periodEndDate: Date;
     let transfers: TransferOut[] | null;
 
-    if (extract.periodStartDate && extract.periodEndDate) {
-      periodStartDate = new Date(extract.periodStartDate);
-      periodEndDate = new Date(extract.periodEndDate);
+    if (extract.period){
+      periodStartDate = CalculateDays.subtract(new Date(), extract.period);
+      periodEndDate = new Date();
     } else {
-      if (extract.period){
-        periodStartDate = CalculateDays.subtract(new Date(), extract.period);
-        periodEndDate = new Date();
-      } else {
-        return res.status(400).send({
-          message: "Bad Request"
-        })
-      }
+      return res.status(400).send({
+        message: "Bad Request"
+      })
     }
 
     console.log(extract);

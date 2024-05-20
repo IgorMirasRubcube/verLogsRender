@@ -116,8 +116,10 @@ export abstract class MapTo {
         if (type) extractIn.type = type;
         if (sort) extractIn.sort = sort;
         if (periodStartDate && periodEndDate) {
-            extractIn.periodStartDate = periodStartDate;
-            extractIn.periodEndDate = periodEndDate;
+            console.log('periodStartDate string: ', periodStartDate)
+            console.log('periodEndDate string: ', periodEndDate)
+            extractIn.periodStartDate = new Date(periodStartDate);
+            extractIn.periodEndDate = new Date(periodEndDate);
         } else {
             extractIn.period = period;
         }
