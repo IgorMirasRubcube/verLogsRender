@@ -5,6 +5,7 @@ import { TransferIn } from "dtos/TransfersDTO";
 import { getRandom } from "./numberUtil";
 import { ExtractIn } from "dtos/ExtractsDTO";
 import { NotificationIn } from "dtos/NotificationsDTO";
+import { CalculateDays } from "./dateUtil";
 
 export abstract class MapTo {
     static UserIn = (body: any): UserIn => {
@@ -121,7 +122,8 @@ export abstract class MapTo {
             extractIn.periodStartDate = new Date(periodStartDate);
             extractIn.periodEndDate = new Date(periodEndDate);
         } else {
-            extractIn.period = period;
+            extractIn.periodStartDate = CalculateDays.subtract(new Date(), period);
+            extractIn.periodEndDate = new Date();
         }
     
         return extractIn;

@@ -183,14 +183,9 @@ export default class TransferController {
     let { skip, take } = req.query;
     const extract: ExtractIn = MapTo.ExtractIn(req.query);
     const account_id: string = req.params.account_id;
-    let periodStartDate: Date;
-    let periodEndDate: Date;
     let transfers: TransferOut[] | null;
 
-    if (extract.period){
-      periodStartDate = CalculateDays.subtract(new Date(), extract.period);
-      periodEndDate = new Date();
-    } else {
+    if (!extract?.periodStartDate || !extract?.periodEndDate) {
       return res.status(400).send({
         message: "Bad Request"
       })
@@ -203,8 +198,8 @@ export default class TransferController {
         case 'all':
           transfers = await transferModel.getAllByAccountId(
             account_id,
-            periodStartDate,
-            periodEndDate,
+            extract.periodStartDate,
+            extract.periodEndDate,
             extract.sort,
             skip,
             take,
@@ -219,8 +214,8 @@ export default class TransferController {
         case 'entrance':
           transfers = await transferModel.getEntrancesByAccountId(
             account_id,
-            periodStartDate,
-            periodEndDate,
+            extract.periodStartDate,
+            extract.periodEndDate,
             extract.sort,
             skip,
             take,
@@ -235,8 +230,8 @@ export default class TransferController {
         case 'exit':
           transfers = await transferModel.getExitsByAccountId(
             account_id,
-            periodStartDate,
-            periodEndDate,
+            extract.periodStartDate,
+            extract.periodEndDate,
             extract.sort,
             skip,
             take,
