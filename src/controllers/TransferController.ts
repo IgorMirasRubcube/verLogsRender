@@ -201,13 +201,6 @@ export default class TransferController {
       }
     }
 
-    // Verifique se as datas são válidas
-    if (isNaN(periodStartDate.getTime()) || isNaN(periodEndDate.getTime())) {
-      return res.status(400).send({
-          message: "Invalid date range"
-      });
-  }
-
     console.log(extract);
 
     try {
