@@ -115,11 +115,11 @@ export abstract class MapTo {
         };
         if (type) extractIn.type = type;
         if (sort) extractIn.sort = sort;
-        if (period) {
-            extractIn.period = period;
+        if (periodStartDate && periodEndDate) {
+            extractIn.periodStartDate = periodStartDate;
+            extractIn.periodEndDate = periodEndDate;
         } else {
-            extractIn.periodStartDate = new Date(periodStartDate);
-            extractIn.periodEndDate = new Date(periodEndDate);
+            extractIn.period = period;
         }
     
         return extractIn;

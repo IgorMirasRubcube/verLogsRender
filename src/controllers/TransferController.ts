@@ -187,7 +187,7 @@ export default class TransferController {
     let periodEndDate: Date;
     let transfers: TransferOut[] | null;
 
-    console.log('skip: ', skip, 'take: ', take);
+    console.log()
     if (extract.periodStartDate && extract.periodEndDate) {
       periodStartDate = extract.periodStartDate;
       periodEndDate = extract.periodEndDate;
@@ -201,6 +201,8 @@ export default class TransferController {
         })
       }
     }
+
+    console.log(extract);
 
     try {
       switch (extract.type) {
