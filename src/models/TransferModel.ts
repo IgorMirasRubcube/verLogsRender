@@ -97,7 +97,7 @@ export default class TransferModel {
           },
         ],
         AND: [
-                { created_at: { gte: periodStartDate, lte: periodEndDate } },
+                { created_at: { gte: new Date(periodStartDate), lte: new Date(periodEndDate) } },
                 { status: { in: ["COMPLETED", "FAILED", "SCHEDULED"] } }
         ],
       },
