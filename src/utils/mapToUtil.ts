@@ -119,8 +119,15 @@ export abstract class MapTo {
         if (periodStartDate && periodEndDate) {
             console.log('periodStartDate string: ', periodStartDate)
             console.log('periodEndDate string: ', periodEndDate)
-            extractIn.periodStartDate = new Date(periodStartDate);
-            extractIn.periodEndDate = new Date(periodEndDate);
+            // Adjust periodStartDate to start at 00:00:00
+            const startOfDay = new Date(periodStartDate);
+            startOfDay.setHours(0, 0, 0, 0);
+            extractIn.periodStartDate = startOfDay;
+
+            // Adjust periodEndDate to end at 23:59:59
+            const endOfDay = new Date(periodEndDate);
+            endOfDay.setHours(23, 59, 59, 999);
+            extractIn.periodEndDate = endOfDay;
         } else {
             extractIn.periodStartDate = CalculateDays.subtract(new Date(), period);
             extractIn.periodEndDate = new Date();
