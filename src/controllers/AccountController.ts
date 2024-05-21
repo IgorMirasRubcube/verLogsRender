@@ -245,7 +245,7 @@ export default class AccountController {
       const newAccount: AccountOut | null = await accountModel.getByAgencyAndNumber(
         agency,
         account_number,
-        { id: true, user_id: true, bank: true, agency: true, account_number: true }
+        { id: true, user_id: true, bank: true, agency: true, account_number: true, blocked: true }
       ) as AccountOut | null;
       
       if (!newAccount?.user_id) {
@@ -269,7 +269,8 @@ export default class AccountController {
         bank: newAccount.bank,
         agency: newAccount.agency,
         account_number: newAccount.account_number,
-        account_id: newAccount.id
+        account_id: newAccount.id,
+        blocked: newAccount.blocked,
       });
     } catch (e) {
       console.log("Failed to get account", e);
