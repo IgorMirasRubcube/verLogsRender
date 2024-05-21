@@ -255,7 +255,7 @@ export default class AccountController {
         });
       }
 
-      const newUser: UserOut | null = await userModel.get(newAccount.user_id, { full_name: true }) as UserOut | null
+      const newUser: UserOut | null = await userModel.get(newAccount.user_id, { full_name: true, cpf: true }) as UserOut | null
 
       if (!newUser?.full_name) {
         return res.status(404).json({
@@ -266,6 +266,7 @@ export default class AccountController {
 
       res.status(200).json({
         full_name: newUser.full_name,
+        cpf: newUser.cpf,
         bank: newAccount.bank,
         agency: newAccount.agency,
         account_number: newAccount.account_number,
