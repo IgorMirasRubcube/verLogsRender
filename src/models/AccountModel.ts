@@ -102,6 +102,32 @@ export default class AccountModel {
       });
     }
 
+    getAllByUserIdExcludeOne = async (userId: string,
+      account_id: string,
+      selectFields: Record<string, boolean> = {
+         id: true,
+         user_id: true,
+         transfer_password: true,
+         balance: true,
+         bank: true,
+         agency: true,
+         account_number: true,
+         type: true,
+         n_attemp: true,
+         blocked: true,
+         block_date: true,
+         created_at: true,
+         updated_at: true 
+      })  => {
+        return await prisma.account.findMany({
+          where: { 
+            user_id: userId, 
+            id: { not: account_id }
+          },
+          select: selectFields,
+        });
+      }
+
     getByAgencyAndNumber = async (agency: string,
       account_number: string,
       selectFields: Record<string, boolean> = {

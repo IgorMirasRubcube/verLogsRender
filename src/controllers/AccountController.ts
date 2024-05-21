@@ -284,7 +284,7 @@ export default class AccountController {
 
   getAllByCPF = async (req: Request, res: Response) => {
     try {
-      const { cpf } : { cpf: string } = req.body;
+      const { cpf, account_id } : { cpf: string, account_id: string } = req.body;
       const newUser: UserOut | null = await userModel.findByCPF(cpf, {id: true, full_name: true }) as UserOut | null;
 
       if (!newUser?.id) {
@@ -294,7 +294,7 @@ export default class AccountController {
         });
       }
 
-      const accounts: AccountOut[] | null = await accountModel.getAllByUserId(newUser.id, {
+      const accounts: AccountOut[] | null = await accountModel.getAllByUserIdExcludeOne(newUser.id, account_id, {
         id: true, bank: true, agency: true, account_number: true, blocked: true
       }) as AccountOut[] | null;
 
