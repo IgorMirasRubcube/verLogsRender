@@ -57,7 +57,7 @@ routes.post('/cpf',
     accountController.getAllByCPF
 );
 
-// @route   POST accounts/balance
+// @route   POST accounts/verifybalance
 // @desc    Verify if account balance is equal or greater transfer_value
 // @acess   Private
 routes.post('/verifybalance',

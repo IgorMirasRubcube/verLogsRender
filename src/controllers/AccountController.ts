@@ -78,8 +78,8 @@ export default class AccountController {
 
   verifyEnoughBalance = async (req: Request, res: Response) => {
     try {
-      const id: string = req.body.id;
-      const transfer_value: number = req.body.transfer_value
+      const id: string = req.body.account_id;
+      const transfer_value: number = req.body.value;
       const newAccount: AccountOut | null = await accountModel.get(id, { balance: true }) as AccountOut | null;
 
       if (!newAccount?.balance) {
