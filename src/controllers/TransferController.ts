@@ -288,7 +288,7 @@ export default class TransferController {
   cancelScheduledTransfer = async (req: Request, res: Response) => {
     const transfer_id: string = req.params.transfer_id;
     const transfer_password: string = req.body.transfer_password;
-
+    
     try {
       const transfer: TransferOut | null = await transferModel.get(transfer_id, 
         { from_account_id: true, status: true }
@@ -311,20 +311,11 @@ export default class TransferController {
           message: "Transfer not found.",
         });
       }
-      
-      const user: UserOut | null = await userModel.get(account.user_id, 
-        { id: true }
-      );
 
-      if (!user?.id) {
-        return res.status(404).json({
-          error: "TRF-06",
-          message: "Transfer not found.",
-        });
-      }
-      console.log('req.user.id :', req.user.id)
-      console.log('user.id :', user.id)
-      if (req.user.id !== user.id) {
+      console.log('req.user.id :', req.user.id);
+      console.log('account.user_id :', account.user_id);
+
+      if (req.user.id !== account.user_id) {
         return res.status(403).json({
           error: "USR-08",
           message: "Not authorized"
