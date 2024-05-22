@@ -30,4 +30,12 @@ routes.put('/users/unblock',
     adminController.unblockUser
 );
 
+// @route   PUT admin/accounts/unblock
+// @desc    Unblock an user
+// @acess   ADMIN
+routes.put('/accounts/unblock',
+    validate(ValidationRules.accountId),
+    adminController.unblockAccount
+);
+
 export default routes;
