@@ -322,7 +322,8 @@ export default class TransferController {
           message: "Transfer not found.",
         });
       }
-      
+      console.log('req.user.id :', req.user.id)
+      console.log('user.id :', user.id)
       if (req.user.id !== user.id) {
         return res.status(403).json({
           error: "USR-08",
