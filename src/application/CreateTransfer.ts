@@ -8,6 +8,15 @@ import { compare } from "bcryptjs";
 import { MapTo } from "utils/mapToUtil";
 import NotificationModel from "models/NotificationModel";
 
+class NumAttemptError extends Error {
+    public n_attempt: number;
+
+    constructor(message: string, n_attempt: number) {
+        super(message);
+        this.n_attempt = n_attempt;
+    }
+}
+
 export default class CreateTransfer {
     constructor () {
 
@@ -63,7 +72,7 @@ export default class CreateTransfer {
                     throw new Error('ACCOUNT BLOCKED');
                 }
 
-                throw new Error('Wrong password'); // add modified Error class later
+                throw new NumAttemptError('Wrong password', accountAttempt.n_attempt); // add modified Error class later
             }
 
             if (fromAccount.blocked) {

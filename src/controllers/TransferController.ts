@@ -25,8 +25,23 @@ export default class TransferController {
     try {
       let balances: {} = await createTransfer.execute(transfer, transfer_password, user_id);
       res.status(201).json(balances);
-    } catch (e) {
+    } catch (e: any) {
       console.log("Failed to create transfer", e);
+      
+      switch (e.message) {
+        case 'ACCOUNT BLOCKED':
+          return res.status(403).json({
+            error: "ACC-09",
+            message: "ACCOUNT BLOCKED"
+          });
+
+          case 'Wrong password':
+            return res.status(403).json({
+              error: "TFR-08",
+              message: "Wrong password",
+              n_attempt: e.n_attempt,
+            });
+      }
       res.status(500).send({
         error: "TFR-01",
         message: "Failed to create transfer",
