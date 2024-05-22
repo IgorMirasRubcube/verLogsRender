@@ -61,7 +61,8 @@ export default class TransferModel {
         id
       },
       data: {
-        status: status
+        status: status,
+        updated_at: new Date(),
       }
     })
   }

@@ -7,15 +7,7 @@ import { Prisma } from "@prisma/client";
 import { compare } from "bcryptjs";
 import { MapTo } from "utils/mapToUtil";
 import NotificationModel from "models/NotificationModel";
-
-class NumAttemptError extends Error {
-    public n_attempt: number;
-
-    constructor(message: string, n_attempt: number) {
-        super(message);
-        this.n_attempt = n_attempt;
-    }
-}
+import { NumAttemptError } from "errors";
 
 export default class CreateTransfer {
     constructor () {
