@@ -233,7 +233,7 @@ export default class AccountModel {
       created_at: true,
       updated_at: true 
     }) => {
-      return await prisma.user.update({
+      return await prisma.account.update({
         where: {
           id: id,
         },
