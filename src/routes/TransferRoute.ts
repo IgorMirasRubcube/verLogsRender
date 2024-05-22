@@ -25,10 +25,10 @@ routes.get('/detailed/:transfer_id',
 
 
 
-// @route   PUT transfers/:transfer_id
+// @route   PUT transfers/cancelscheduled/:transfer_id
 // @desc    Cancel a scheduled transfer
 // @acess   Private
-routes.put('/:transfer_id',
+routes.put('/cancelscheduled/:transfer_id',
     validate(ValidationRules.transferId),
     validate(ValidationRules.transferPassword),
     transferController.cancelScheduledTransfer
