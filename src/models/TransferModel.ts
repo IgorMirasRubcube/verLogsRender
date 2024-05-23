@@ -89,17 +89,38 @@ export default class TransferModel {
   ) => {
     return await prisma.transfer.findMany({
       where: {
-        OR: [
-          {
-            to_account_id: account_id,
-          },
-          {
-            from_account_id: account_id
-          },
-        ],
         AND: [
-                { created_at: { gte: periodStartDate, lte: periodEndDate } },
-                { status: { in: ["COMPLETED", "FAILED", "SCHEDULED"] } }
+          {
+            created_at: {
+              gte: periodStartDate,
+              lte: periodEndDate,
+            },
+          },
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    OR: [
+                      { from_account_id: account_id },
+                      { to_account_id: account_id },
+                    ],
+                  },
+                  {
+                    status: {
+                      in: ["COMPLETED", "FAILED"],
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  { from_account_id: account_id },
+                  { status: "SCHEDULED" },
+                ],
+              },
+            ],
+          },
         ],
       },
       orderBy: {
@@ -108,7 +129,7 @@ export default class TransferModel {
       select: selectFields,
       skip: Number(skip),
       take: Number(take),
-    })
+    });
   }
 
   getEntrancesByAccountId = async (account_id: string,
@@ -139,7 +160,7 @@ export default class TransferModel {
             gte: periodStartDate,
             lte: periodEndDate
           },
-          status: "COMPLETED" || "FAILED" || "SCHEDULED",
+          status: "COMPLETED",
         },
       },
       orderBy: {
@@ -179,7 +200,7 @@ export default class TransferModel {
             gte: periodStartDate,
             lte: periodEndDate
           },
-          status: "COMPLETED" || "FAILED" || "SCHEDULED",
+          status: "COMPLETED",
         },
       },
       orderBy: {
