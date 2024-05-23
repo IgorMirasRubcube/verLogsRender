@@ -97,20 +97,16 @@ export default class CreateTransfer {
                     accountModel.updateBalance(transfer.to_account_id, new Prisma.Decimal(toAccountNewBalance))
                 ]);
 
-                const notificationFromUser: NotificationIn = MapTo.NotificationIn({
+                const notificationToUser: NotificationIn = MapTo.NotificationIn({
                     transfer_id: newTransfer.id,
                     user_id: toAccount.user_id,
-                    text: `You recieved R$${newTransfer.value}`,
+                    text: `You recieved RC${newTransfer.value}`,
                 });
 
-                const notification: NotificationOut | null = await notificationModel.create(notificationFromUser);
+                const notification: NotificationOut | null = await notificationModel.create(notificationToUser);
 
                 return {
-                    from_account_old_balance: fromAccount.balance,
-                    from_account_new_balance: fromBalanceUpdated,
-                    to_account_old_balance: toAccount.balance,
-                    to_account_new_balance: toBalanceUpdated,
-                    notification_to_user: notification,
+                    transfer_id: newTransfer.id
                 };
             }
         } catch (e) {
