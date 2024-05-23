@@ -66,4 +66,13 @@ routes.post('/verifybalance',
     accountController.verifyEnoughBalance
 );
 
+// @route   POST accounts/create
+// @desc    Create another account
+// @acess   Private
+routes.post('/create',
+    validate(ValidationRules.transferPassword),
+    validate(ValidationRules.account_type),
+    accountController.create
+);
+
 export default routes;

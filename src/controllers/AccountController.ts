@@ -7,6 +7,7 @@ import { UserOut } from "dtos/UsersDTO";
 import { Prisma } from "@prisma/client";
 import { genSalt, hash, compare } from 'bcryptjs'
 import { hasBirthDate } from "utils/validationUtil"
+import { MapTo } from "utils/mapToUtil";
 
 const accountModel = new AccountModel();
 const userModel = new UserModel();
@@ -14,8 +15,7 @@ const userModel = new UserModel();
 export default class AccountController {
   create = async (req: Request, res: Response) => {
     try {
-      let account: AccountIn = req.body;
-      account.account_number = getRandom(8);
+      let account: AccountIn = MapTo.AccountIn(req.body);
       const newAccount: AccountOut = await accountModel.create(account);
       res.status(201).json(newAccount);
     } catch (e) {

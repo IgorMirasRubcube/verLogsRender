@@ -1,8 +1,9 @@
-import { Prisma } from "@prisma/client";
+import { Prisma} from "@prisma/client";
 
 export interface AccountIn {
     transfer_password: string;
     account_number: string;
+    type: string; // create enum ACCOUNT_TYPE after
     created_at?: Date;
     updated_at?: Date;
     user_id: string;

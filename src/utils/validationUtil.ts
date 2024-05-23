@@ -119,3 +119,7 @@ export function containsDigitsSequence(str: string): boolean {
 
     return sequences.some(sequence => str.includes(sequence));
 }
+
+export function isValidAccountType(account_type: string): boolean {
+    return account_type === 'checking' || account_type === 'saving'
+}

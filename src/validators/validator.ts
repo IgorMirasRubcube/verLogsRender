@@ -15,7 +15,8 @@ import { containsSequence,
          isValidTransferValue,
          isExtractType,
          isValidPeriod,
-         isSortType
+         isSortType,
+         isValidAccountType
        } from 'utils/validationUtil'
 
 export abstract class ValidationRules {
@@ -36,6 +37,12 @@ export abstract class ValidationRules {
 
     static email: ValidationChain[] = [
       check('email', 'Please include a valid email').isEmail(),
+    ]
+
+    static account_type: ValidationChain[] = [
+      check('account_type')
+        .custom(account_type => isValidAccountType(account_type))
+        .withMessage('Invalid account type')
     ]
 
     static address: ValidationChain[] = [

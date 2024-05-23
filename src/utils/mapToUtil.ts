@@ -62,15 +62,19 @@ export abstract class MapTo {
 
     static AccountIn = (body: any): AccountIn => {
         let {
-            transfer_password
+            transfer_password,
+            account_type
         } = body;
 
         let account_number = getRandom(8);
         let user_id = '';
+        let type = '';
+        account_type ? type = account_type : type = 'checking';
 
         return {
             transfer_password,
             account_number,
+            type,
             user_id
         };
     }
