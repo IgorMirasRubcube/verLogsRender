@@ -15,9 +15,29 @@ const userModel = new UserModel();
 export default class AccountController {
   create = async (req: Request, res: Response) => {
     try {
+      const user: UserOut | null = await userModel.get(req.user.id, {birth_date: true})
       let account: AccountIn = MapTo.AccountIn(req.body);
-      const newAccount: AccountOut = await accountModel.create(account);
-      res.status(201).json(newAccount);
+
+      if (!user?.birth_date) {
+        return res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
+      });
+
+      }
+      if (hasBirthDate(account.transfer_password, user.birth_date)) {
+        return res.status(422).json({
+          error: "ACC-08",
+          message: "Transfer password cannot have birth date infos",
+        });
+      }
+
+      const salt = await genSalt(10);
+      account.transfer_password = await hash(account.transfer_password, salt);
+      account.user_id = req.user.id;
+
+      await accountModel.create(account);
+      res.status(200).send('Sucess');
     } catch (e) {
       console.log("Failed to create account", e);
       res.status(500).send({
