@@ -41,15 +41,15 @@ schedule("0 2 15 * *", () => {
   timezone: "America/Sao_Paulo"
 });
 
-//schedule("*/5 * * * *", () => {
-  //try {
-    //axios.get('https://rubcamp-3-backend-igormiras.onrender.com/'); 
-  //} catch (e) {
-    //console.log('Error on GET deployed API: ', e);
-  //}
-//}, {
-  //timezone: "America/Sao_Paulo"
-//});
+schedule("*/5 * * * *", () => {
+  try {
+    axios.get('https://acordadordebackend.onrender.com/');
+  } catch (e) {
+    console.log('Error on GET deployed API: ', e);
+  }
+}, {
+  timezone: "America/Sao_Paulo"
+});
 
 app.get("/", (req, res) => {
   return res.send("Hello World");
