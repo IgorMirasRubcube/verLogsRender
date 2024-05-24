@@ -113,7 +113,7 @@ export default class TransferController {
 
       res.status(200).json({
         value: detailedTransfer.value,
-        description: detailedTransfer.value,
+        description: detailedTransfer.description,
         type: detailedTransfer.type,
         is_scheduled: detailedTransfer.is_scheduled,
         schedule_date: detailedTransfer.schedule_date,
