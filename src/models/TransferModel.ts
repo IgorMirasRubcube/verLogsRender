@@ -107,16 +107,16 @@ export default class TransferModel {
                     ],
                   },
                   {
-                    status: {
-                      in: ["COMPLETED", "FAILED"],
-                    },
+                    status: "COMPLETED",
                   },
                 ],
               },
               {
                 AND: [
                   { from_account_id: account_id },
-                  { status: "SCHEDULED" },
+                  { status: {
+                    in: ['SCHEDULED', "FAILED"],
+                  }},
                 ],
               },
             ],
