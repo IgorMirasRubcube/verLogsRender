@@ -119,7 +119,7 @@ export default class UserController {
             message: "Failed to send email",
           });
         } else {
-          return res.status(200).send();
+          return res.status(200).json(newUser.email);
         }
       });
     } catch (e) {
