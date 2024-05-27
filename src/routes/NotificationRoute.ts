@@ -15,4 +15,9 @@ routes.get('/', notificationController.getAll);
 // @acess   Private
 routes.get('/unviewed_notifications', notificationController.getNumberOfUnviewed);
 
+// @route   GET /notifications/me
+// @desc    Get all notifications of logged user
+// @acess   Private
+routes.get('/me', notificationController.getAllLoggedUser);
+
 export default routes;

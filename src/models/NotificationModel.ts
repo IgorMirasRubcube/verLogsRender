@@ -38,6 +38,12 @@ export default class NotificationModel {
         user_id,
         viewed_flag: false,
       }
-    })
+    });
+  }
+
+  getAllLoggedUser = async (user_id: string) => {
+    return await prisma.notification.findMany({
+      where: { user_id }
+    });
   }
 };

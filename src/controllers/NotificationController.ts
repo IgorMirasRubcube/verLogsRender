@@ -33,4 +33,19 @@ export default class NotificationController {
     }
   };
 
+  getAllLoggedUser = async (req: Request, res: Response) => {
+    try {
+        const notifications: NotificationOut[] | null = await notificationModel
+            .getAllLoggedUser(req.user.id) as NotificationOut[];
+        
+        res.status(200).json(notifications);
+    } catch (e) {
+      console.log("Server Error", e);
+      res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  };
+
 }
