@@ -23,7 +23,7 @@ export default class NotificationController {
   getNumberOfUnviewed = async (req: Request, res: Response) => {
     try {
         const number_of_unviewed: number = await notificationModel.getNumberOfUnviewed(req.user.id);
-        res.status(200).json(number_of_unviewed);
+        res.status(200).json(number_of_unviewed > 0);
     } catch (e) {
       console.log("Server Error", e);
       res.status(500).send({
