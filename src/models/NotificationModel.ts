@@ -41,9 +41,25 @@ export default class NotificationModel {
     });
   }
 
-  getAllLoggedUser = async (user_id: string) => {
+  getAllLoggedUser = async (user_id: string,
+    skip: any,
+    take: any,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      transfer_id: true,
+      user_id: true,
+      text: true,
+      is_favorite: true,
+      viewed_flag: true,
+      created_at: true,
+      updated_at: true 
+   }
+  ) => {
     return await prisma.notification.findMany({
-      where: { user_id }
+      where: { user_id },
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
     });
   }
 };

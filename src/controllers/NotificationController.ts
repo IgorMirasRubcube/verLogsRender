@@ -34,9 +34,20 @@ export default class NotificationController {
   };
 
   getAllLoggedUser = async (req: Request, res: Response) => {
+    let { skip, take } = req.query;
     try {
         const notifications: NotificationOut[] | null = await notificationModel
-            .getAllLoggedUser(req.user.id) as NotificationOut[];
+            .getAllLoggedUser(req.user.id, skip, take,
+              { 
+                id: true,
+                transfer_id: true,
+                text: true,
+                is_favorite: true,
+                viewed_flag: true,
+                created_at: true,
+                updated_at: true 
+              }
+            ) as NotificationOut[];
         
         res.status(200).json(notifications);
     } catch (e) {
