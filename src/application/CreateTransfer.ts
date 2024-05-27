@@ -100,7 +100,7 @@ export default class CreateTransfer {
                 const notificationToUser: NotificationIn = MapTo.NotificationIn({
                     transfer_id: newTransfer.id,
                     user_id: toAccount.user_id,
-                    text: `You recieved RC${newTransfer.value}`,
+                    text: `Você recebeu RC${newTransfer.value}`,
                 });
 
                 const notification: NotificationOut | null = await notificationModel.create(notificationToUser);

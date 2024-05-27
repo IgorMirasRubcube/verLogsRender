@@ -45,7 +45,7 @@ export default class PayScheduledTransfers {
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         user_id: fromAccount.user_id,
-                        text: `Transfer Scheduled to ${transfer.schedule_date} in value of R$${transfer.value} FAILED (Not enough balance)`  
+                        text: `A transferência agendada para ${transfer.schedule_date} no valor de RC${transfer.value} FALHOU (saldo insuficiente)`  
                     });
                     await notificationModel.create(notificationFromUser);
                 } else {
@@ -62,13 +62,13 @@ export default class PayScheduledTransfers {
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         user_id: fromAccount.user_id,
-                        text: `Transfer Scheduled to ${transfer.schedule_date} in value of R$${transfer.value} COMPLETED`  
+                        text: `Transferência Agendada para ${transfer.schedule_date} no valor de RC${transfer.value} foi efetuada`  
                     });
 
                     const notificationToUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         user_id: toAccount.user_id,
-                        text: `You recieved R$${transfer.value}`  
+                        text: `Você recebeu RC${transfer.value}`  
                     });
 
                     await Promise.all([
