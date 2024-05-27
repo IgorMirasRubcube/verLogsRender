@@ -32,45 +32,11 @@ export default class NotificationModel {
     });
   }
 
-  me = async (id: string,
-    selectFields: Record<string, boolean> = {
-       id: true,
-       user_id: true,
-       transfer_password: true,
-       balance: true,
-       bank: true,
-       agency: true,
-       account_number: true,
-       n_attemp: true,
-       blocked: true,
-       block_date: true,
-       created_at: true,
-       updated_at: true 
-    })  => {
-    return await prisma.account.findFirst({
+  getNumberOfUnviewed = async (user_id: string) => {
+    return await prisma.notification.count({
       where: {
-        user_id: id,
-        type: "checking"
-      },
-      select: selectFields,
-    });
-  }
-
-  delete = async (id: string) => {
-    return await prisma.account.delete({
-      where: {
-        id
-      }
-    })
-  }
-
-  update = async (id: string, account: AccountIn) => {
-    return await prisma.account.update({
-      where: {
-        id
-      },
-      data: {
-        ...account
+        user_id,
+        viewed_flag: false,
       }
     })
   }
