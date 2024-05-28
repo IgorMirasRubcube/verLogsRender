@@ -9,26 +9,26 @@ const userModel = new UserModel();
 export default class AuthController {
   verify = async (req: Request, res: Response) => {
     let user: UserLoginIn = req.body;
-    
+
     try {
       const newUser: UserLoginOut | null = await userModel.findByCPF(user.cpf,
         { id: true, password: true, blocked: true, role: true }
       ) as UserLoginOut | null;
-      
+
       if (!newUser) {
-        return res.status(401).json({
-            error: "USR-07",
-            message: "Invalid cpf and/or password",
+        return res.status(404).json({
+          error: "USR-06",
+          message: "User not found.",
         });
       }
 
       const isMatch = await compare(user.password, newUser.password);
 
-      if (!isMatch){
+      if (!isMatch) {
         const userAttempt: UserOut | null = await userModel.incrementAttempt(
-          newUser.id, {n_attempt: true}
+          newUser.id, { n_attempt: true }
         ) as UserOut;
-        
+
         if (!userAttempt?.n_attempt) {
           return res.status(401).json({
             error: "USR-07",
@@ -45,12 +45,12 @@ export default class AuthController {
         }
 
         return res.status(401).json({
-            error: "USR-07",
-            message: "Invalid cpf and/or password",
-            n_attempt: userAttempt.n_attempt,
+          error: "USR-07",
+          message: "Invalid cpf and/or password",
+          n_attempt: userAttempt.n_attempt,
         });
       }
-      
+
       if (newUser.blocked) {
         return res.status(403).json({
           error: "USR-09",
@@ -66,15 +66,15 @@ export default class AuthController {
           role: newUser.role,
         }
       };
-      
+
       jwt.sign(
         payload,
-          process.env.JWT_SECRET as Secret,
-          { expiresIn: "1h" },
-          (err, token) => {
-            if (err) throw err;
-            res.status(201).json({ token })
-          }
+        process.env.JWT_SECRET as Secret,
+        { expiresIn: "1h" },
+        (err, token) => {
+          if (err) throw err;
+          res.status(201).json({ token })
+        }
       );
     } catch (e) {
       console.log("Server Error", e);
