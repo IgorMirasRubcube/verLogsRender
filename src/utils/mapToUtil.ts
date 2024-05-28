@@ -143,13 +143,13 @@ export abstract class MapTo {
     static NotificationIn = (body: any): NotificationIn => {
         const {
             transfer_id,
-            user_id,
+            account_id,
             text,
         } = body
 
         return {
             transfer_id,
-            user_id,
+            account_id,
             text
         }
     }
