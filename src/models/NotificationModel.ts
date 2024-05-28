@@ -31,23 +31,17 @@ export default class NotificationModel {
       select: selectFields,
     });
   }
-  // where: {
-  //   user_id,
-  //   viewed_flag: false,
-  // }
-  getNumberOfUnviewed = async (user_id: string) => {
+  
+  getNumberOfUnviewed = async (account_id: string) => {
     return await prisma.notification.count({
       where: {
-        user: {
-          accounts: {
-            
-          }
-        }
+        account_id,
+        viewed_flag: false,
       }
     });
   }
 
-  getAllLoggedUser = async (user_id: string,
+  getAllLoggedUser = async (account_id: string,
     skip: any,
     take: any,
     selectFields: Record<string, boolean> = {
@@ -62,7 +56,7 @@ export default class NotificationModel {
    }
   ) => {
     return await prisma.notification.findMany({
-      where: { user_id },
+      where: { account_id },
       select: selectFields,
       skip: Number(skip),
       take: Number(take),

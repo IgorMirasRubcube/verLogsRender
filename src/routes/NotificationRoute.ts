@@ -13,11 +13,11 @@ routes.get('/', notificationController.getAll);
 // @route   GET /notifications/unviewed_notifications
 // @desc    Get the number of unviewed notifications
 // @acess   Private
-routes.get('/unviewed_notifications', notificationController.getNumberOfUnviewed);
+routes.post('/unviewed_notifications', validate(ValidationRules.accountId), notificationController.getNumberOfUnviewed);
 
 // @route   GET /notifications/me
 // @desc    Get all notifications of logged user
 // @acess   Private
-routes.get('/me', notificationController.getAllLoggedUser);
+routes.post('/me', validate(ValidationRules.accountId), notificationController.getAllLoggedUser);
 
 export default routes;

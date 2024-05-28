@@ -29,12 +29,12 @@ export default class PayScheduledTransfers {
                 
                 const fromAccount: AccountOut = await accountModel.get(
                     transfer.from_account_id,
-                    {user_id: true, balance: true}
+                    {user_id: true, balance: true, id: true}
                 ) as AccountOut;
 
                 const toAccount: AccountOut = await accountModel.get(
                     transfer.to_account_id,
-                    {user_id: true, balance: true}
+                    {user_id: true, balance: true, id: true}
                 ) as AccountOut;
                 
                 if (!transfer?.id) { return; }
@@ -44,7 +44,7 @@ export default class PayScheduledTransfers {
                     
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
-                        user_id: fromAccount.user_id,
+                        account_id: fromAccount.id,
                         text: `A transferência agendada para ${transfer.schedule_date} no valor de RC${transfer.value} FALHOU (saldo insuficiente)`  
                     });
                     await notificationModel.create(notificationFromUser);
@@ -61,13 +61,13 @@ export default class PayScheduledTransfers {
 
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
-                        user_id: fromAccount.user_id,
+                        account_id: fromAccount.id,
                         text: `Transferência Agendada para ${transfer.schedule_date} no valor de RC${transfer.value} foi efetuada`  
                     });
 
                     const notificationToUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
-                        user_id: toAccount.user_id,
+                        account_id: toAccount.id,
                         text: `Você recebeu RC${transfer.value}`  
                     });
 

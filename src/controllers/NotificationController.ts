@@ -21,8 +21,9 @@ export default class NotificationController {
   };
 
   getNumberOfUnviewed = async (req: Request, res: Response) => {
+    const { account_id } = req.body;
     try {
-        const number_of_unviewed: number = await notificationModel.getNumberOfUnviewed(req.user.id);
+        const number_of_unviewed: number = await notificationModel.getNumberOfUnviewed(account_id);
         res.status(200).json(number_of_unviewed > 0);
     } catch (e) {
       console.log("Server Error", e);
@@ -34,10 +35,11 @@ export default class NotificationController {
   };
 
   getAllLoggedUser = async (req: Request, res: Response) => {
+    const { account_id } = req.body;
     let { skip, take } = req.query;
     try {
         const notifications: NotificationOut[] | null = await notificationModel
-            .getAllLoggedUser(req.user.id, skip, take,
+            .getAllLoggedUser(account_id, skip, take,
               { 
                 id: true,
                 transfer_id: true,

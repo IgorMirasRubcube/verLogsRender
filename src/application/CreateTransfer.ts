@@ -37,10 +37,10 @@ export default class CreateTransfer {
             }
             
             const toAccount: AccountOut | null = await accountModel.get(transfer.to_account_id, {
-                balance: true, user_id: true
+                balance: true, id: true
             }) as AccountOut | null;
 
-            if (!toAccount?.balance || !toAccount?.user_id) {
+            if (!toAccount?.balance || !toAccount?.id) {
                 throw new Error('To account not found');
             }
             
@@ -99,7 +99,7 @@ export default class CreateTransfer {
 
                 const notificationToUser: NotificationIn = MapTo.NotificationIn({
                     transfer_id: newTransfer.id,
-                    user_id: toAccount.user_id,
+                    account_id: toAccount.id,
                     text: `Você recebeu RC${newTransfer.value}`,
                 });
 
