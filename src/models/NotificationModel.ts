@@ -31,12 +31,18 @@ export default class NotificationModel {
       select: selectFields,
     });
   }
-
+  // where: {
+  //   user_id,
+  //   viewed_flag: false,
+  // }
   getNumberOfUnviewed = async (user_id: string) => {
     return await prisma.notification.count({
       where: {
-        user_id,
-        viewed_flag: false,
+        user: {
+          accounts: {
+            
+          }
+        }
       }
     });
   }

@@ -83,7 +83,7 @@ CREATE TABLE "Transfer" (
 CREATE TABLE "Notification" (
     "id" SERIAL NOT NULL,
     "transfer_id" UUID NOT NULL,
-    "user_id" UUID NOT NULL,
+    "account_id" UUID NOT NULL,
     "text" TEXT NOT NULL,
     "is_favorite" BOOLEAN NOT NULL DEFAULT false,
     "viewed_flag" BOOLEAN NOT NULL DEFAULT false,
@@ -121,4 +121,4 @@ ALTER TABLE "Transfer" ADD CONSTRAINT "Transfer_to_account_id_fkey" FOREIGN KEY 
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_transfer_id_fkey" FOREIGN KEY ("transfer_id") REFERENCES "Transfer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Notification" ADD CONSTRAINT "Notification_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
