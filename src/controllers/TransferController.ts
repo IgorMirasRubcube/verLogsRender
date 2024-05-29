@@ -269,7 +269,23 @@ export default class TransferController {
   
           res.status(200).json(transfers);
           break;
-  
+        
+          case 'income':
+            transfers = await transferModel.getIncomesByAccountId(
+              account_id,
+              extract.periodStartDate,
+              extract.periodEndDate,
+              extract.sort,
+              skip,
+              take,
+              { id: true, value: true, type: true, status: true, 
+                created_at: true, schedule_date: true, from_account_id: true
+              },
+            ) as TransferOut[];
+    
+            res.status(200).json(transfers);
+            break;
+          
         default:
           return res.status(500).send({
             error: "EXT-03",

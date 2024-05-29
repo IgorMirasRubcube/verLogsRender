@@ -104,6 +104,7 @@ enum TransferStatus {
   COMPLETED
   CANCELED
   FAILED
+  INCOME
 }
 
 enum UserRole {

@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "TransferStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED', 'FAILED');
+CREATE TYPE "TransferStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED', 'FAILED', 'INCOME');
 
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('DEFAULT', 'ADMIN');

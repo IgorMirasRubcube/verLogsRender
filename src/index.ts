@@ -16,6 +16,7 @@ import ResetUserAttempt from "application/ResetUserAttempt";
 import axios from "axios";
 import cors from 'cors'
 import { Request, Response, NextFunction } from 'express';
+import PaySavingsIncome from "application/PaySavingsIncome";
 
 
 DateTime.local().setZone("America/Sao_Paulo");
@@ -37,6 +38,13 @@ schedule("1 0 * * *", () => {
 schedule("0 2 15 * *", () => {
   const resetUserAttempt = new ResetUserAttempt();
   resetUserAttempt.execute();
+}, {
+  timezone: "America/Sao_Paulo"
+});
+
+schedule("1 0 1 * *", () => {
+  const paySavingsIncome = new PaySavingsIncome();
+  paySavingsIncome.execute();
 }, {
   timezone: "America/Sao_Paulo"
 });

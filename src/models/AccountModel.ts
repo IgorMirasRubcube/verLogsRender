@@ -244,4 +244,25 @@ export default class AccountModel {
         select: selectFields,
       });
     }
+
+    getSavings = async (selectFields: Record<string, boolean> = {
+      id: true,
+      user_id: true,
+      transfer_password: true,
+      balance: true,
+      bank: true,
+      agency: true,
+      account_number: true,
+      n_attempt: true,
+      blocked: true,
+      block_date: true,
+      created_at: true,
+      updated_at: true 
+    } ) => {
+      return await prisma.account.findMany({
+        where: {
+          type: "saving"
+        }
+      })
+    }
 };

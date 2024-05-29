@@ -258,6 +258,46 @@ export default class TransferModel {
     })
   }
 
+  getIncomesByAccountId = async (account_id: string,
+    periodStartDate: Date,
+    periodEndDate: Date,
+    sortType: string,
+    skip: any,
+    take: any,
+    selectFields: Record<string, boolean> = {
+      id: true,
+      from_account_id: true,
+      to_account_id: true,
+      value: true,
+      description: true,
+      type: true,
+      is_scheduled: true,
+      schedule_date: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+    }
+  ) => {
+    return await prisma.transfer.findMany({
+      where: {
+        to_account_id: account_id,
+        AND: {
+          created_at: {
+            gte: periodStartDate,
+            lte: periodEndDate
+          },
+          status: "INCOME",
+        },
+      },
+      orderBy: {
+        created_at: sortType === 'older' ? 'asc' : 'desc',
+      },
+      select: selectFields,
+      skip: Number(skip),
+      take: Number(take),
+    })
+  }
+
   getScheduledTransfersForPayment = async (
     selectFields: Record<string, boolean> = {
       id: true,
