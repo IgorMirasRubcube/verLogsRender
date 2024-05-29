@@ -62,4 +62,25 @@ export default class NotificationModel {
       take: Number(take),
     });
   }
+
+  setNotificationViewed = async (notification_id: number, 
+    selectFields: Record<string, boolean> = {
+      id: true,
+      transfer_id: true,
+      user_id: true,
+      text: true,
+      is_favorite: true,
+      viewed_flag: true,
+      created_at: true,
+      updated_at: true 
+    }) => {
+      return await prisma.notification.update({
+        where: {
+          id: notification_id
+        },
+        data: {
+          viewed_flag: true
+        }
+      })
+    }
 };

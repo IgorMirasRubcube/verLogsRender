@@ -153,6 +153,10 @@ export abstract class ValidationRules {
       check('account_id').isUUID()
     ];
 
+    static notificationId: ValidationChain[] = [
+      check('notification_id').isInt()
+    ];
+
     static userId: ValidationChain[] = [
       check('user_id').isUUID()
     ];

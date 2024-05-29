@@ -61,4 +61,21 @@ export default class NotificationController {
     }
   };
 
+  setNotificationViewed = async (req: Request, res: Response) => {
+    const { notification_id } = req.params;
+    let notification_id_number = Number(notification_id);
+
+    try {
+        await notificationModel.setNotificationViewed(notification_id_number);
+
+        res.status(200).json({});
+    } catch (e) {
+      console.log("Server Error", e);
+      res.status(500).send({
+        error: "SRV-01",
+        message: "Server Error",
+      });
+    }
+  };
+
 }
