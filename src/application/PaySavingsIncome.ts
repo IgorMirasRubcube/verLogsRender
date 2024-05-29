@@ -9,7 +9,7 @@ import { MapTo } from "utils/mapToUtil";
 import { formatNumberToSend } from "utils/numberUtil";
 
 export default class PaySavingsIncome {
-    constructor () {
+    constructor() {
 
     }
 
@@ -17,12 +17,12 @@ export default class PaySavingsIncome {
         const transferModel = new TransferModel();
         const accountModel = new AccountModel();
         const notificationModel = new NotificationModel();
-        
+
         try {
             const savingAccounts: AccountOut[] | null = await accountModel.getSavings({
                 balance: true, id: true,
             });
-            
+
             for (const savingAccount of savingAccounts) {
                 if (!savingAccount?.balance || !savingAccount?.id) {
                     console.log('passou aqui PaySavingsInocome (deu B.O.)')
@@ -51,6 +51,24 @@ export default class PaySavingsIncome {
                 });
 
                 await notificationModel.create(notificationToUser);
+
+                const newSavingBalance = Number(savingAccount.balance) + (Number(savingAccount.balance) * 0.01);
+                const newSavingBalancePrismaDecimal = new Prisma.Decimal(newSavingBalance);
+
+                fetch(`https://www.google-analytics.com/mp/collect?firebase_app_id=${process.env.FIREBASE_APP_ID}&api_secret=${process.env.FIREBASE_API_SECRET}`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        app_instance_id: 'app_instance_id',
+                        events: [{
+                            name: 'savingBalance',
+                            params: {
+                                created_at: Date.now().toString(),
+                                balance: formatNumberToSend(newSavingBalancePrismaDecimal.toString()),
+                                account_id: savingAccount.id,
+                            },
+                        }]
+                    })
+                });
             }
 
 
