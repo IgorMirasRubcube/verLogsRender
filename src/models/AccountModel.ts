@@ -261,8 +261,12 @@ export default class AccountModel {
     } ) => {
       return await prisma.account.findMany({
         where: {
-          type: "saving"
-        }
+          type: "saving",
+          balance: {
+            gte: 1
+          }
+        },
+        select: selectFields
       })
     }
 };
