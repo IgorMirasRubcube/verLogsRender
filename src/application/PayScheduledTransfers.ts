@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 import NotificationModel from "models/NotificationModel";
 import { NotificationIn } from "dtos/NotificationsDTO";
 import { MapTo } from "utils/mapToUtil";
-import { formatNumberToSend } from "utils/numberUtil";
+import { formatNumberToShow } from "utils/numberUtil";
 import { formatDateToBrazilianPortuguese } from "utils/dateUtil";
 
 export default class PayScheduledTransfers {
@@ -47,7 +47,7 @@ export default class PayScheduledTransfers {
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         account_id: fromAccount.id,
-                        text: `A transferência agendada para ${transfer.schedule_date} no valor de RC${formatNumberToSend(transfer.value.toString())} FALHOU (saldo insuficiente)`
+                        text: `A transferência agendada para ${transfer.schedule_date} no valor de RC${formatNumberToShow(transfer.value.toString())} FALHOU (saldo insuficiente)`
                     });
                     await notificationModel.create(notificationFromUser);
                 } else {
@@ -64,13 +64,13 @@ export default class PayScheduledTransfers {
                     const notificationFromUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         account_id: fromAccount.id,
-                        text: `A transferência agendada para ${formatDateToBrazilianPortuguese(transfer.schedule_date)} no valor de RC${formatNumberToSend(transfer.value.toString())} foi efetuada`
+                        text: `A transferência agendada para ${formatDateToBrazilianPortuguese(transfer.schedule_date)} no valor de RC${formatNumberToShow(transfer.value.toString())} foi efetuada`
                     });
 
                     const notificationToUser: NotificationIn = MapTo.NotificationIn({
                         transfer_id: transfer.id,
                         account_id: toAccount.id,
-                        text: `Você recebeu RC${formatNumberToSend(transfer.value.toString())}`
+                        text: `Você recebeu RC${formatNumberToShow(transfer.value.toString())}`
                     });
 
                     await Promise.all([
@@ -87,7 +87,7 @@ export default class PayScheduledTransfers {
                                 params: {
                                     created_at: Date.now().toString(),
                                     status: "SCHEDULED",
-                                    value: formatNumberToSend(transfer.value.toString()),
+                                    value: formatNumberToShow(transfer.value.toString()),
                                 },
                             }]
                         })

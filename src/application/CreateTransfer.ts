@@ -8,7 +8,7 @@ import { compare } from "bcryptjs";
 import { MapTo } from "utils/mapToUtil";
 import NotificationModel from "models/NotificationModel";
 import { NumAttemptError } from "errors";
-import { formatNumberToSend } from "utils/numberUtil";
+import { formatNumberToShow } from "utils/numberUtil";
 
 export default class CreateTransfer {
     constructor () {
@@ -101,7 +101,7 @@ export default class CreateTransfer {
                 const notificationToUser: NotificationIn = MapTo.NotificationIn({
                     transfer_id: newTransfer.id,
                     account_id: toAccount.id,
-                    text: `Você recebeu RC${formatNumberToSend(newTransfer.value.toString())}`,
+                    text: `Você recebeu RC${formatNumberToShow(newTransfer.value.toString())}`,
                 });
 
                 const notification: NotificationOut | null = await notificationModel.create(notificationToUser);

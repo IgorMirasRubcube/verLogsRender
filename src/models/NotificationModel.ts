@@ -58,6 +58,9 @@ export default class NotificationModel {
     return await prisma.notification.findMany({
       where: { account_id },
       select: selectFields,
+      orderBy: {
+        created_at: 'desc'
+      },
       skip: Number(skip),
       take: Number(take),
     });
