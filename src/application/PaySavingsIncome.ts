@@ -32,7 +32,7 @@ export default class PaySavingsIncome {
                 const calculatedValuePrismaDecimal = new Prisma.Decimal(calculatedValue);
 
                 const income = MapTo.TransferIn({
-                    from_account_id: "424f3723-bc59-4037-8d02-57400ce9acb1",
+                    from_account_id: "126bc9cc-4fb1-4ba8-bfb5-338ff39f6a16",    // account_id of RUBBANK S.A.
                     to_account_id: savingAccount.id,
                     value: calculatedValuePrismaDecimal,
                     description: '',
