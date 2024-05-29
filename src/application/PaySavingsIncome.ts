@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import NotificationModel from "models/NotificationModel";
 import { NotificationIn } from "dtos/NotificationsDTO";
 import { MapTo } from "utils/mapToUtil";
+import { formatNumberToSend } from "utils/numberUtil";
 
 export default class PaySavingsIncome {
     constructor () {
@@ -46,7 +47,7 @@ export default class PaySavingsIncome {
                 const notificationToUser: NotificationIn = MapTo.NotificationIn({
                     transfer_id: paidIncome.id,
                     account_id: savingAccount.id,
-                    text: `Sua Conta Poupança rendeu RC${calculatedValuePrismaDecimal} esse mês`
+                    text: `Sua Conta Poupança rendeu RC${formatNumberToSend(calculatedValuePrismaDecimal.toString())} esse mês`
                 });
 
                 await notificationModel.create(notificationToUser);

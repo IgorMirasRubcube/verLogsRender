@@ -33,6 +33,7 @@
     "cep-promise": "^4.4.1",
     "cors": "^2.8.5",
     "cpf": "^2.0.1",
+    "dayjs": "^1.11.11",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-handlebars": "^7.1.2",
