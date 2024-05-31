@@ -90,8 +90,12 @@ export abstract class MapTo {
             schedule_date,
             status,
         } = body
-
-        schedule_date = new Date(schedule_date);
+        console.log('is_scheduled :', is_scheduled);
+        console.log('schedule_date :', schedule_date);
+        if (schedule_date) {
+            console.log('tem schedule_date')
+            schedule_date = new Date(schedule_date);
+        }
 
         return {
             from_account_id,
