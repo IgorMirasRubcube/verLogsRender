@@ -67,7 +67,8 @@ export default class TransferModel {
     })
   }
 
-  getAllByAccountId = async (account_id: string,
+  getAllByAccountId = async (
+    account_id: string,
     periodStartDate: Date,
     periodEndDate: Date,
     sortType: string,
@@ -99,38 +100,26 @@ export default class TransferModel {
           {
             OR: [
               {
-                AND: [
-                  {
-                    OR: [
-                      { from_account_id: account_id },
-                      { to_account_id: account_id },
-                    ],
-                  },
-                  {
-                    status: "COMPLETED",
-                  },
-                ],
+                from_account_id: account_id,
+                status: "COMPLETED",
               },
               {
-                AND: [
-                  { from_account_id: account_id },
-                  { status: {
-                    in: ['SCHEDULED', "FAILED"],
-                  }},
-                ],
+                to_account_id: account_id,
+                status: "COMPLETED",
               },
             ],
           },
         ],
       },
       orderBy: {
-        created_at: sortType === 'older' ? 'asc' : 'desc',
+        created_at: sortType === "older" ? "asc" : "desc",
       },
       select: selectFields,
       skip: Number(skip),
       take: Number(take),
     });
-  }
+  };
+  
 
   getEntrancesByAccountId = async (account_id: string,
     periodStartDate: Date,
